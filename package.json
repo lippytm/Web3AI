@@ -1,0 +1,23 @@
+{
+  "name": "web3ai",
+  "version": "1.0.0",
+  "description": "Web3AI - AI-powered assistant using OpenAI's ChatGPT",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web3",
+    "ai",
+    "chatgpt",
+    "openai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "openai": "^6.1.0"
+  }
+}
