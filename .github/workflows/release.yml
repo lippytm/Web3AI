@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Agda
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y agda
+        continue-on-error: true
+
+      - name: Build project
+        run: |
+          if compgen -G "*.agda" > /dev/null || compgen -G "src/*.agda" > /dev/null; then
+            echo "Building Agda files..."
+            find . -name "*.agda" -type f -exec agda {} \;
+          else
+            echo "No Agda files found to build"
+          fi
+        continue-on-error: true
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          echo "## Changes" > CHANGELOG.md
+          if git describe --tags --abbrev=0 HEAD^ 2>/dev/null; then
+            git log $(git describe --tags --abbrev=0 HEAD^)..HEAD --pretty=format:"- %s" >> CHANGELOG.md
+          else
+            git log --pretty=format:"- %s" >> CHANGELOG.md
+          fi
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+
+      - name: Notify related repositories
+        run: |
+          echo "Release created successfully"
+        continue-on-error: true

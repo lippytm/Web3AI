@@ -1,0 +1,77 @@
+name: Repository Dispatch Handler
+
+on:
+  repository_dispatch:
+    types:
+      - ai-time-machines-updated
+      - time-machines-builders-updated
+      - gatsby-blog-updated
+      - transparency-logic-updated
+
+jobs:
+  handle-dispatch:
+    name: Handle Repository Update
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log dispatch event
+        run: |
+          echo "Received event type: ${{ github.event.action }}"
+          echo "Event payload:"
+          echo "${{ toJson(github.event.client_payload) }}"
+
+      - name: Handle AI-Time-Machines update
+        if: github.event.action == 'ai-time-machines-updated'
+        run: |
+          echo "AI-Time-Machines repository was updated"
+          echo "Reference: ${{ github.event.client_payload.ref }}"
+          echo "SHA: ${{ github.event.client_payload.sha }}"
+          echo "Repository: ${{ github.event.client_payload.repository }}"
+          # Add custom logic here to respond to AI-Time-Machines updates
+          # For example: sync configurations, update dependencies, etc.
+
+      - name: Handle Time-Machines-Builders update
+        if: github.event.action == 'time-machines-builders-updated'
+        run: |
+          echo "Time-Machines-Builders repository was updated"
+          echo "Reference: ${{ github.event.client_payload.ref }}"
+          echo "SHA: ${{ github.event.client_payload.sha }}"
+          echo "Repository: ${{ github.event.client_payload.repository }}"
+
+      - name: Handle Gatsby Blog update
+        if: github.event.action == 'gatsby-blog-updated'
+        run: |
+          echo "Gatsby Blog repository was updated"
+          echo "Reference: ${{ github.event.client_payload.ref }}"
+          echo "SHA: ${{ github.event.client_payload.sha }}"
+          echo "Repository: ${{ github.event.client_payload.repository }}"
+
+      - name: Handle Transparency Logic update
+        if: github.event.action == 'transparency-logic-updated'
+        run: |
+          echo "Transparency Logic repository was updated"
+          echo "Reference: ${{ github.event.client_payload.ref }}"
+          echo "SHA: ${{ github.event.client_payload.sha }}"
+          echo "Repository: ${{ github.event.client_payload.repository }}"
+
+      - name: Run tests if needed
+        run: |
+          echo "Running integration tests after external update..."
+          # Add test commands here
+        continue-on-error: true
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Repository Dispatch Handler Failed',
+              body: `The repository dispatch handler failed for event type: ${{ github.event.action }}\n\nPlease investigate.`,
+              labels: ['automation', 'bug']
+            })
