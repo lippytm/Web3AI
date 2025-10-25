@@ -63,3 +63,4 @@ jobs:
             Please review the changes and test thoroughly before merging.
           branch: dependency-updates
           delete-branch: true
+          labels: dependencies, automated

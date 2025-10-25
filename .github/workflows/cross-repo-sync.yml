@@ -47,9 +47,22 @@ jobs:
           echo "Syncing workflow configurations..."
           cd target
           if [ -d ".github/workflows" ]; then
-            echo "Target has workflows, checking for updates..."
-            # Compare and identify differences
-            diff -r ../web3ai/.github/workflows .github/workflows || true
+            echo "## Workflow Comparison" > ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            # List workflows in both repositories
+            echo "### Web3AI Workflows" >> ../workflow-comparison.md
+            ls -1 ../web3ai/.github/workflows/*.yml 2>/dev/null | xargs -n1 basename >> ../workflow-comparison.md || echo "None" >> ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            echo "### Target Repository Workflows" >> ../workflow-comparison.md
+            ls -1 .github/workflows/*.yml 2>/dev/null | xargs -n1 basename >> ../workflow-comparison.md || echo "None" >> ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            echo "### Recommendation" >> ../workflow-comparison.md
+            echo "Review workflow files manually and identify opportunities for standardization." >> ../workflow-comparison.md
+          else
+            echo "Target repository does not have workflows directory" > ../workflow-comparison.md
           fi
         continue-on-error: true
 
