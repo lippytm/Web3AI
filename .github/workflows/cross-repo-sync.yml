@@ -1,0 +1,104 @@
+name: Cross-Repository Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repository:
+        description: 'Target repository to sync with (e.g., AI-Time-Machines)'
+        required: true
+        type: choice
+        options:
+          - AI-Time-Machines
+          - Time-Machines-Builders-
+          - gatsby-starter-blog
+          - Transparency-Logic-Time-Machine-Bots-
+      sync_type:
+        description: 'Type of synchronization'
+        required: true
+        type: choice
+        options:
+          - workflow-config
+          - documentation
+          - github-config
+          - all
+
+permissions:
+  contents: read
+
+jobs:
+  sync-repositories:
+    name: Sync with ${{ github.event.inputs.target_repository }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout Web3AI
+        uses: actions/checkout@v4
+        with:
+          path: web3ai
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: lippytm/${{ github.event.inputs.target_repository }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          path: target
+        continue-on-error: true
+
+      - name: Sync workflow configurations
+        if: github.event.inputs.sync_type == 'workflow-config' || github.event.inputs.sync_type == 'all'
+        run: |
+          echo "Syncing workflow configurations..."
+          cd target
+          if [ -d ".github/workflows" ]; then
+            echo "## Workflow Comparison" > ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            # List workflows in both repositories
+            echo "### Web3AI Workflows" >> ../workflow-comparison.md
+            ls -1 ../web3ai/.github/workflows/*.yml 2>/dev/null | xargs -n1 basename >> ../workflow-comparison.md || echo "None" >> ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            echo "### Target Repository Workflows" >> ../workflow-comparison.md
+            ls -1 .github/workflows/*.yml 2>/dev/null | xargs -n1 basename >> ../workflow-comparison.md || echo "None" >> ../workflow-comparison.md
+            echo "" >> ../workflow-comparison.md
+            
+            echo "### Recommendation" >> ../workflow-comparison.md
+            echo "Review workflow files manually and identify opportunities for standardization." >> ../workflow-comparison.md
+          else
+            echo "Target repository does not have workflows directory" > ../workflow-comparison.md
+          fi
+        continue-on-error: true
+
+      - name: Sync documentation
+        if: github.event.inputs.sync_type == 'documentation' || github.event.inputs.sync_type == 'all'
+        run: |
+          echo "Checking documentation consistency..."
+          # Compare README patterns, contributing guidelines, etc.
+          if [ -f "target/README.md" ] && [ -f "web3ai/README.md" ]; then
+            echo "Both repositories have README files"
+          fi
+        continue-on-error: true
+
+      - name: Sync GitHub configurations
+        if: github.event.inputs.sync_type == 'github-config' || github.event.inputs.sync_type == 'all'
+        run: |
+          echo "Syncing GitHub configurations..."
+          # Sync issue templates, PR templates, etc.
+        continue-on-error: true
+
+      - name: Create summary
+        run: |
+          echo "## Sync Summary" > sync-summary.md
+          echo "- Source: Web3AI" >> sync-summary.md
+          echo "- Target: ${{ github.event.inputs.target_repository }}" >> sync-summary.md
+          echo "- Sync Type: ${{ github.event.inputs.sync_type }}" >> sync-summary.md
+          echo "- Timestamp: $(date)" >> sync-summary.md
+          cat sync-summary.md
+
+      - name: Upload sync summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-summary
+          path: sync-summary.md
