@@ -22,10 +22,15 @@ on:
           - github-config
           - all
 
+permissions:
+  contents: read
+
 jobs:
   sync-repositories:
     name: Sync with ${{ github.event.inputs.target_repository }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout Web3AI

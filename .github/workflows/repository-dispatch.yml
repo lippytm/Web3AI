@@ -8,10 +8,17 @@ on:
       - gatsby-blog-updated
       - transparency-logic-updated
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   handle-dispatch:
     name: Handle Repository Update
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     
     steps:
       - name: Checkout repository

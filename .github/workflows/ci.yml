@@ -7,10 +7,18 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: read
+
 jobs:
   code-quality:
     name: Code Quality & Security
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     
     steps:
       - name: Checkout repository
@@ -36,6 +44,9 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: read
     
     steps:
       - name: Checkout repository
@@ -47,6 +58,8 @@ jobs:
   build-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -75,6 +88,8 @@ jobs:
   documentation:
     name: Documentation Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
@@ -98,6 +113,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [code-quality, build-test, documentation]
     if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
     
     steps:
       - name: Trigger AI-Time-Machines workflow
