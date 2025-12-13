@@ -1,3 +1,4 @@
+import { pathToFileURL } from 'url';
 import dotenv from 'dotenv';
 import { loadConfig, validateConfig } from './utils/config.js';
 import { logger } from './utils/logger.js';
@@ -58,10 +59,7 @@ async function main() {
 }
 
 // Run if this is the main module
-const modulePath = process.argv[1];
-const isMainModule = modulePath && import.meta.url.endsWith(modulePath.replace(/\\/g, '/'));
-
-if (isMainModule) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
     logger.error('Unhandled error', error);
     process.exit(1);
