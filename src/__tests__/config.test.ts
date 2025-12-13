@@ -1,4 +1,4 @@
-import { loadConfig, validateConfig } from '../utils/config';
+import { loadConfig, validateConfig } from '../utils/config.js';
 
 describe('Config', () => {
   const originalEnv = process.env;

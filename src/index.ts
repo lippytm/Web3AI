@@ -58,7 +58,10 @@ async function main() {
 }
 
 // Run if this is the main module
-if (import.meta.url === `file://${process.argv[1]}`) {
+const modulePath = process.argv[1];
+const isMainModule = modulePath && import.meta.url.endsWith(modulePath.replace(/\\/g, '/'));
+
+if (isMainModule) {
   main().catch((error) => {
     logger.error('Unhandled error', error);
     process.exit(1);

@@ -1,4 +1,4 @@
-import { logger, LogLevel } from '../utils/logger';
+import { logger, LogLevel } from '../utils/logger.js';
 
 describe('Logger', () => {
   let consoleSpy: {
