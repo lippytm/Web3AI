@@ -5,6 +5,13 @@ const OpenAIChat = require('./openai-chat');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Validate required environment variables
+if (!process.env.OPENAI_API_KEY) {
+  console.error('Error: OPENAI_API_KEY is not set in environment variables');
+  console.error('Please set OPENAI_API_KEY in your .env file');
+  process.exit(1);
+}
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
