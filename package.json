@@ -1,0 +1,22 @@
+{
+  "name": "web3ai",
+  "version": "1.0.0",
+  "description": "Web3AI - AI-powered blockchain and Web3 development toolkit",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web3",
+    "ai",
+    "blockchain",
+    "openai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "openai": "^6.10.0"
+  }
+}
