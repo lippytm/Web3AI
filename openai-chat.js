@@ -41,6 +41,11 @@ class OpenAIChat {
         messages: messages,
       });
 
+      // Validate response
+      if (!completion.choices || completion.choices.length === 0) {
+        throw new Error('No response received from OpenAI');
+      }
+
       // Extract the response
       const response = completion.choices[0].message.content;
       
@@ -69,6 +74,14 @@ class OpenAIChat {
    */
   async sendMessageWithSystem(message, systemPrompt) {
     try {
+      if (!message || typeof message !== 'string') {
+        throw new Error('Message must be a non-empty string');
+      }
+
+      if (!systemPrompt || typeof systemPrompt !== 'string') {
+        throw new Error('System prompt must be a non-empty string');
+      }
+
       const messages = [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message }
@@ -78,6 +91,11 @@ class OpenAIChat {
         model: this.model,
         messages: messages,
       });
+
+      // Validate response
+      if (!completion.choices || completion.choices.length === 0) {
+        throw new Error('No response received from OpenAI');
+      }
 
       const response = completion.choices[0].message.content;
       
