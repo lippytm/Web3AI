@@ -74,11 +74,14 @@ function checkFiles(files, category) {
     const fullPath = path.join(__dirname, file);
     const exists = fs.existsSync(fullPath);
     
+    // Remove all occurrences of '../' for display
+    const displayPath = file.split('../').join('');
+    
     if (exists) {
-      console.log(`  ✓ ${file.replace('../', '')}`);
+      console.log(`  ✓ ${displayPath}`);
       passed++;
     } else {
-      console.log(`  ✗ MISSING: ${file.replace('../', '')}`);
+      console.log(`  ✗ MISSING: ${displayPath}`);
       failed++;
     }
   });

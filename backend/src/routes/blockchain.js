@@ -7,16 +7,17 @@ import {
   getUserInteractions
 } from '../controllers/blockchainController.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { generalLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-// Public routes
-router.get('/balance', getBalance);
-router.get('/transaction/:txHash', getTransaction);
-router.get('/contract/:address', getContractInfo);
+// Public routes with rate limiting
+router.get('/balance', generalLimiter, getBalance);
+router.get('/transaction/:txHash', generalLimiter, getTransaction);
+router.get('/contract/:address', generalLimiter, getContractInfo);
 
-// Protected routes
-router.post('/interactions', authenticateToken, saveInteraction);
-router.get('/interactions', authenticateToken, getUserInteractions);
+// Protected routes with rate limiting
+router.post('/interactions', generalLimiter, authenticateToken, saveInteraction);
+router.get('/interactions', generalLimiter, authenticateToken, getUserInteractions);
 
 export default router;
