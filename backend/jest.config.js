@@ -8,5 +8,8 @@ export default {
     '!src/index.js'
   ],
   coverageDirectory: 'coverage',
-  verbose: true
+  verbose: true,
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 };
