@@ -5,6 +5,18 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.pytest_cache/
+.ruff_cache/
+
 # Environment variables
 .env
 .env.local
@@ -16,6 +28,14 @@ pnpm-debug.log*
 dist/
 build/
 *.tsbuildinfo
+.next/
+out/
+
+# Hardhat/Contracts
+cache/
+artifacts/
+typechain/
+typechain-types/
 
 # IDE
 .vscode/
@@ -32,6 +52,8 @@ Thumbs.db
 coverage/
 *.lcov
 .nyc_output
+htmlcov/
+.coverage
 
 # Logs
 logs/

@@ -1,0 +1,16 @@
+{
+  "name": "web3ai-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for Web3AI",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "node": "hardhat node"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.18",
+    "dotenv": "^16.4.7"
+  }
+}

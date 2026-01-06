@@ -1,260 +1,350 @@
-# Web3AI - Full Stack AI Application with Blockchain Integration
+# Web3AI - AI + Web3 Starter Bundle
 
-A modern full-stack application combining blockchain technology with artificial intelligence, featuring user authentication, database management, and deployment-ready infrastructure.
+A comprehensive full-stack starter bundle combining AI capabilities with Web3 technology. This project provides a production-ready foundation for building decentralized applications with artificial intelligence features.
 
 ## 🌟 Features
 
-### Frontend
-- **React 19** with Vite for fast development
-- **TailwindCSS** for responsive, modern UI design
-- **Web3 Integration** using ethers.js for blockchain interactions
-- **React Router** for navigation
-- **Axios** for API communication
-- **Context API** for state management
-
-### Backend
-- **Node.js & Express.js** RESTful API
-- **Sequelize ORM** for PostgreSQL database operations
-- **JWT Authentication** with bcrypt for security
-- **TensorFlow.js** for AI/ML capabilities
-- **Smart Contract Risk Assessment** using neural networks
-- **Blockchain Service** with ethers.js
-
-### Database
-- **PostgreSQL** for data persistence
-- User management with encrypted passwords
-- Blockchain interaction history tracking
-
-### AI/ML
-- **TensorFlow.js** neural network for smart contract risk assessment
-- Risk level classification (low, medium, high)
-- Contract analysis with insights and recommendations
-
-### Testing
-- **Jest** for backend testing
-- **Vitest & React Testing Library** for frontend testing
-- Automated test coverage
-
-### Deployment
-- **Docker & Docker Compose** for containerization
-- **GitHub Actions** CI/CD pipeline
-- Production-ready configuration
+- **Python/FastAPI Backend**: High-performance async API with AI integration
+- **Next.js/TypeScript Frontend**: Modern React framework with full TypeScript support
+- **Hardhat Smart Contracts**: Professional Solidity development environment
+- **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
+- **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
+- **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
 
 ## 📋 Prerequisites
 
-- Node.js 20.x or higher
-- PostgreSQL 15 or higher
-- Docker & Docker Compose (for containerized deployment)
-- MetaMask or similar Web3 wallet (for frontend blockchain features)
+- **Python** 3.11 or higher
+- **Node.js** 20.x or higher
+- **npm** 9.x or higher
 
 ## 🚀 Quick Start
 
-### Local Development Setup
+### 1. Clone the Repository
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/lippytm/Web3AI.git
-   cd Web3AI
-   ```
+```bash
+git clone https://github.com/lippytm/Web3AI.git
+cd Web3AI
+```
 
-2. **Backend Setup**
-   ```bash
-   cd backend
-   cp .env.example .env
-   # Edit .env with your database credentials
-   npm install
-   npm run dev
-   ```
+### 2. Backend Setup (Python/FastAPI)
 
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   cp .env.example .env
-   # Edit .env with your API URL
-   npm install
-   npm run dev
-   ```
+```bash
+cd backend
 
-4. **Database Setup**
-   ```bash
-   # Create PostgreSQL database
-   createdb web3ai_db
-   # Database tables will be created automatically on backend startup
-   ```
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-### Docker Deployment
+# Install dependencies
+pip install -r requirements.txt
 
-1. **Build and run with Docker Compose**
-   ```bash
-   docker-compose up -d
-   ```
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your API keys and settings
 
-2. **Access the application**
-   - Frontend: http://localhost
-   - Backend API: http://localhost:5000
-   - Database: localhost:5432
+# Run development server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Backend will be available at: **http://localhost:8000**
+
+### 3. Frontend Setup (Next.js/TypeScript)
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+cp .env.example .env.local
+# Edit .env.local with your settings
+
+# Run development server
+npm run dev
+```
+
+Frontend will be available at: **http://localhost:3000**
+
+### 4. Smart Contracts Setup (Hardhat)
+
+```bash
+cd contracts
+
+# Install dependencies
+npm install
+
+# Configure environment (optional for local development)
+cp .env.example .env
+
+# Compile contracts
+npm run compile
+
+# Run tests
+npm test
+
+# Start local Hardhat node (optional)
+npm run node
+```
+
+## 🔧 Environment Variables
+
+### Backend (.env)
+
+```env
+# OpenAI Configuration
+OPENAI_API_KEY=your-openai-api-key-here
+MODEL_NAME=GPT-5.1-Codex-Max
+
+# Blockchain Configuration
+ETH_RPC_URL=https://eth.llamarpc.com
+NETWORK=mainnet
+
+# Application Settings
+DEBUG=false
+```
+
+### Frontend (.env.local)
+
+```env
+# Backend API URL
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Blockchain RPC
+NEXT_PUBLIC_RPC_URL=https://eth.llamarpc.com
+NEXT_PUBLIC_CHAIN_ID=1
+
+# AI Model Configuration
+NEXT_PUBLIC_MODEL_NAME=GPT-5.1-Codex-Max
+```
+
+### Contracts (.env)
+
+```env
+# Private key for deployment (NEVER commit real keys!)
+PRIVATE_KEY=your-private-key-here
+
+# RPC URLs
+ETH_RPC_URL=https://eth.llamarpc.com
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR-PROJECT-ID
+```
 
 ## 📁 Project Structure
 
 ```
 Web3AI/
-├── backend/                    # Node.js/Express backend
-│   ├── src/
-│   │   ├── config/            # Database and JWT configuration
-│   │   ├── controllers/       # Route controllers
-│   │   ├── middleware/        # Authentication & error handling
-│   │   ├── models/            # Sequelize database models
-│   │   ├── routes/            # API routes
-│   │   ├── services/          # Business logic (AI, Blockchain)
-│   │   └── index.js           # Application entry point
-│   ├── tests/                 # Jest tests
-│   ├── Dockerfile             # Backend container configuration
-│   └── package.json
-├── frontend/                   # React frontend
-│   ├── src/
-│   │   ├── components/        # Reusable UI components
-│   │   ├── context/           # React Context providers
-│   │   ├── pages/             # Page components
-│   │   ├── services/          # API service layer
-│   │   └── App.jsx            # Main application component
-│   ├── Dockerfile             # Frontend container configuration
-│   ├── nginx.conf             # Nginx configuration
+├── backend/                    # Python/FastAPI backend
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py            # FastAPI application
+│   │   └── settings.py        # Configuration settings
+│   ├── tests/                 # Pytest tests
+│   ├── requirements.txt       # Python dependencies
+│   └── .env.example
+├── frontend/                   # Next.js/TypeScript frontend
+│   ├── app/
+│   │   ├── page.tsx           # Main page
+│   │   ├── layout.tsx         # Root layout
+│   │   └── globals.css        # Global styles
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env.example
+├── contracts/                  # Hardhat smart contracts
+│   ├── contracts/
+│   │   └── Lock.sol           # Sample contract
+│   ├── scripts/
+│   │   └── deploy.js          # Deployment script
+│   ├── test/
+│   │   └── Lock.test.js       # Contract tests
+│   ├── hardhat.config.js
 │   └── package.json
 ├── .github/
 │   └── workflows/
-│       └── ci-cd.yml          # GitHub Actions CI/CD pipeline
-├── docker-compose.yml          # Multi-container orchestration
+│       └── ci-cd.yml          # GitHub Actions CI/CD
+├── .pre-commit-config.yaml    # Pre-commit hooks
 └── README.md
 ```
-
-## 🔧 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/profile` - Get user profile (protected)
-- `PUT /api/auth/profile` - Update user profile (protected)
-
-### Blockchain
-- `GET /api/blockchain/balance` - Get wallet balance
-- `GET /api/blockchain/transaction/:txHash` - Get transaction details
-- `GET /api/blockchain/contract/:address` - Get contract information
-- `POST /api/blockchain/interactions` - Save blockchain interaction (protected)
-- `GET /api/blockchain/interactions` - Get user interactions (protected)
-
-### AI/ML
-- `POST /api/ai/assess-risk` - Assess smart contract risk (protected)
-- `POST /api/ai/predict` - Generic AI prediction (protected)
-- `GET /api/ai/model-info` - Get AI model information
 
 ## 🧪 Testing
 
 ### Backend Tests
+
 ```bash
 cd backend
-npm test
-npm test -- --coverage  # With coverage report
+pytest                    # Run all tests
+pytest -v                 # Verbose output
+pytest --cov=app          # With coverage report
 ```
 
 ### Frontend Tests
+
 ```bash
 cd frontend
+npm test                  # Run tests
+npm run type-check        # TypeScript check
+```
+
+### Smart Contract Tests
+
+```bash
+cd contracts
+npm test                  # Run Hardhat tests
+npm run compile           # Compile contracts
+```
+
+## 🎨 Linting & Formatting
+
+### Backend (Python)
+
+```bash
+cd backend
+ruff check .              # Run linter
+ruff format .             # Format code
+black .                   # Format with black
+```
+
+### Frontend (TypeScript)
+
+```bash
+cd frontend
+npm run lint              # Run ESLint
+npm run format            # Format with Prettier
+npm run format:check      # Check formatting
+```
+
+### Pre-commit Hooks
+
+Install pre-commit hooks (optional):
+
+```bash
+pip install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+## 🔗 Hardhat Usage
+
+### Compile Contracts
+
+```bash
+cd contracts
+npm run compile
+```
+
+### Run Tests
+
+```bash
 npm test
 ```
 
-## 🔐 Environment Variables
+### Deploy Contracts
 
-### Backend (.env)
-```env
-PORT=5000
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=web3ai_db
-DB_USER=postgres
-DB_PASSWORD=password
-JWT_SECRET=your-secret-key-change-in-production
-ETHEREUM_RPC_URL=https://eth.llamarpc.com
-POLYGON_RPC_URL=https://polygon-rpc.com
+Local deployment:
+```bash
+# Terminal 1: Start local node
+npm run node
+
+# Terminal 2: Deploy
+npm run deploy
 ```
 
-### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:5000/api
+Testnet deployment:
+```bash
+npx hardhat run scripts/deploy.js --network sepolia
 ```
 
-## 🎨 Frontend Pages
+### Network Configuration
 
-- **Home** - Landing page with feature overview
-- **Login/Register** - User authentication
-- **Dashboard** - User profile and blockchain interactions
-- **AI Analysis** - Smart contract risk assessment tool
-- **Blockchain** - Blockchain explorer (balance checker, transaction viewer)
+- **hardhat**: Local development network (chainId: 1337)
+- **localhost**: Local node at http://127.0.0.1:8545
+- **mainnet**: Ethereum mainnet (requires PRIVATE_KEY in .env)
+- **sepolia**: Sepolia testnet (requires PRIVATE_KEY in .env)
 
-## 🤖 AI Model
+## 🤖 AI/LLM Configuration
 
-The application includes a TensorFlow.js neural network that analyzes smart contracts based on:
-- Code complexity
-- Transaction count
-- Number of unique users
-- Total value locked
-- Code size
-- External calls
-- Ownership structure
-- Upgradeability
-- Audit score
-- Time deployed
+The backend uses OpenAI's API through LangChain for AI capabilities:
 
-The model outputs risk levels (low, medium, high) with confidence scores and actionable insights.
+1. **Get API Key**: Sign up at [OpenAI Platform](https://platform.openai.com/)
+2. **Set Environment Variable**: Add `OPENAI_API_KEY` to `backend/.env`
+3. **Configure Model**: Set `MODEL_NAME=GPT-5.1-Codex-Max` (or your preferred model)
+
+The FastAPI backend exposes AI endpoints at `/api/info` and can be extended with custom AI routes.
+
+## 🌐 RPC Configuration
+
+### Public RPC Endpoints
+
+The project includes default public RPC endpoints:
+- **Ethereum Mainnet**: https://eth.llamarpc.com
+- **Sepolia Testnet**: Configure in `.env` files
+
+### Custom RPC
+
+For production, consider using:
+- [Infura](https://infura.io/)
+- [Alchemy](https://www.alchemy.com/)
+- [QuickNode](https://www.quicknode.com/)
+
+Update `ETH_RPC_URL` and `NEXT_PUBLIC_RPC_URL` in environment files.
 
 ## 🔄 CI/CD Pipeline
 
-The GitHub Actions workflow automatically:
-1. Runs backend tests with PostgreSQL
-2. Runs frontend tests
-3. Builds Docker images (on main branch)
-4. Validates code quality
+GitHub Actions automatically runs on push/PR to main:
 
-## 🛡️ Security Features
+1. **Python Backend Job**: Runs ruff linter and pytest
+2. **Node Frontend Job**: Runs ESLint and builds Next.js app
+3. **Contracts Job**: Compiles contracts and runs Hardhat tests
 
-- **JWT Authentication** with secure token storage
-- **Password Hashing** using bcrypt
-- **Environment Variables** for sensitive data
-- **CORS Configuration** for API security
-- **Input Validation** on all endpoints
-- **SQL Injection Protection** via Sequelize ORM
+See `.github/workflows/ci-cd.yml` for configuration.
 
-## 📚 Technology Stack
+## 📦 Dependencies
 
-**Frontend:**
-- React 19
-- Vite
-- TailwindCSS
-- ethers.js
-- Axios
-- React Router
+### Backend (Python)
 
-**Backend:**
-- Node.js 20
-- Express.js
-- Sequelize ORM
-- PostgreSQL
-- JWT & bcrypt
-- TensorFlow.js
-- ethers.js
+- `fastapi`: Modern web framework
+- `uvicorn[standard]`: ASGI server
+- `pydantic`: Data validation
+- `httpx`: Async HTTP client
+- `web3`: Ethereum library
+- `langchain-openai`: OpenAI integration
+- `pytest`: Testing framework
+- `ruff`: Linter and formatter
+- `black`: Code formatter
 
-**DevOps:**
-- Docker & Docker Compose
-- GitHub Actions
-- Nginx
+### Frontend (Node/TypeScript)
+
+- `next`: React framework
+- `react`: UI library
+- `typescript`: Type safety
+- `eslint`: Linter
+- `prettier`: Code formatter
+- `@typescript-eslint/*`: TypeScript ESLint plugins
+- `ethers`: Ethereum library
+- `viem`: Modern Ethereum library
+- `wagmi`: React hooks for Ethereum
+
+### Contracts (Hardhat)
+
+- `hardhat`: Development environment
+- `@nomicfoundation/hardhat-toolbox`: Hardhat plugins bundle
+
+## 🛠️ Development Workflow
+
+1. **Start Backend**: `cd backend && uvicorn app.main:app --reload`
+2. **Start Frontend**: `cd frontend && npm run dev`
+3. **Start Local Chain** (optional): `cd contracts && npm run node`
+4. **Run Tests**: Use npm/pytest in respective directories
+5. **Lint Code**: Use ruff/eslint before committing
+6. **Commit Changes**: Pre-commit hooks will run automatically
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
+3. Make your changes
+4. Run tests and linters
+5. Commit with descriptive messages
+6. Push and create a Pull Request
 
 ## 📄 License
 
@@ -266,6 +356,8 @@ Web3AI Team
 
 ## 🙏 Acknowledgments
 
-- TensorFlow.js for machine learning capabilities
-- ethers.js for blockchain integration
+- FastAPI for the modern Python framework
+- Next.js for the React framework
+- Hardhat for smart contract development
+- OpenAI for AI capabilities
 - The open-source community
