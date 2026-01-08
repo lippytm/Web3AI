@@ -5,6 +5,8 @@ Web3AI - Python AI Script Example
 This script demonstrates how to use OpenAI's Python library to interact
 with AI models for Web3 and blockchain-related tasks.
 
+Now featuring GPT-5.1-Codex-Max for enhanced code generation and analysis.
+
 Requirements:
     pip install openai python-dotenv
 """
@@ -14,6 +16,9 @@ from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Default model - can be overridden with OPENAI_MODEL env variable
+DEFAULT_MODEL = os.getenv('OPENAI_MODEL', 'gpt-5.1-codex-max')
 
 
 def setup_openai():
@@ -31,7 +36,8 @@ def setup_openai():
             return None
         
         client = OpenAI(api_key=api_key)
-        print('✅ OpenAI client initialized successfully\n')
+        print('✅ OpenAI client initialized successfully')
+        print(f'📊 Using model: {DEFAULT_MODEL}\n')
         return client
         
     except ImportError:
@@ -40,13 +46,14 @@ def setup_openai():
         return None
 
 
-def analyze_smart_contract(client, contract_code):
+def analyze_smart_contract(client, contract_code, model=DEFAULT_MODEL):
     """
     Example function to analyze smart contract code using AI
     
     Args:
         client: OpenAI client instance
         contract_code: Smart contract code to analyze
+        model: AI model to use (defaults to GPT-5.1-Codex-Max)
     
     Returns:
         AI analysis of the contract
@@ -56,18 +63,18 @@ def analyze_smart_contract(client, contract_code):
     
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an expert in blockchain and smart contract security. Analyze smart contracts for potential vulnerabilities and best practices."
+                    "content": "You are an expert in blockchain and smart contract security. Analyze smart contracts for potential vulnerabilities and best practices. Provide detailed, actionable feedback."
                 },
                 {
                     "role": "user",
                     "content": f"Analyze this smart contract code:\n\n{contract_code}"
                 }
             ],
-            max_tokens=300,
+            max_tokens=500,
             temperature=0.5
         )
         
@@ -77,13 +84,14 @@ def analyze_smart_contract(client, contract_code):
         return f"Error analyzing contract: {str(e)}"
 
 
-def explain_web3_concept(client, concept):
+def explain_web3_concept(client, concept, model=DEFAULT_MODEL):
     """
     Get AI explanation of Web3 concepts
     
     Args:
         client: OpenAI client instance
         concept: Web3 concept to explain
+        model: AI model to use (defaults to GPT-5.1-Codex-Max)
     
     Returns:
         AI explanation
@@ -93,18 +101,18 @@ def explain_web3_concept(client, concept):
     
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a Web3 educator. Explain blockchain and Web3 concepts in simple, clear terms."
+                    "content": "You are a Web3 educator. Explain blockchain and Web3 concepts in simple, clear terms with practical examples."
                 },
                 {
                     "role": "user",
                     "content": f"Explain: {concept}"
                 }
             ],
-            max_tokens=200,
+            max_tokens=400,
             temperature=0.7
         )
         
@@ -118,7 +126,7 @@ def run_demo():
     """
     Run demonstration of AI capabilities
     """
-    print('🚀 Web3AI Python Demo')
+    print('🚀 Web3AI Python Demo (GPT-5.1-Codex-Max)')
     print('=' * 50)
     print()
     
