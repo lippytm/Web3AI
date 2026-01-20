@@ -89,6 +89,86 @@ npm run node
 
 ## 🔧 Environment Variables
 
+### AI/Web3 Integration Adapters
+
+The project includes comprehensive SDK adapters (`sdk/` directory) for integrating AI and Web3 services across multiple languages:
+
+- **TypeScript/Node.js**: `@lippytm/ai-sdk` - see `sdk/typescript/`
+- **Python**: `ai_sdk` module - see `sdk/python/`
+- **Go**: `aisdk` package - see `sdk/go/`
+- **Rust**: `aisdk` crate - see `sdk/rust/`
+
+#### Available Providers
+
+**AI Providers:**
+- OpenAI (GPT-4, GPT-3.5, etc.)
+- Hugging Face (Transformers, Inference API)
+- LangChain (orchestration)
+- LlamaIndex (data framework)
+
+**Vector Stores (Optional):**
+- Pinecone (managed vector database)
+- Weaviate (open-source vector search)
+- Chroma (embeddings database)
+
+**Web3 Chains:**
+- Ethereum (via ethers.js, web3.py)
+- Solana (via @solana/web3.js, solana-py)
+- Extensible for additional chains
+
+**Messaging Platforms:**
+- Slack (via Slack SDK)
+- Discord (via Discord.js/discord.py)
+
+**Data Storage:**
+- PostgreSQL (via pg/asyncpg)
+- Redis (via ioredis/redis)
+- S3 (via AWS SDK)
+- IPFS (via ipfs-http-client)
+
+#### Required Environment Variables
+
+**AI Configuration:**
+```env
+AI_PROVIDER=openai                    # openai, huggingface, custom
+AI_API_KEY=your-api-key-here
+AI_MODEL=gpt-4                        # model name
+```
+
+**Vector Store (Optional):**
+```env
+VECTOR_PROVIDER=pinecone              # pinecone, weaviate, chroma
+VECTOR_API_KEY=your-vector-api-key
+VECTOR_ENDPOINT=https://...           # for weaviate/chroma
+VECTOR_INDEX=your-index-name
+```
+
+**Web3 Configuration:**
+```env
+WEB3_CHAIN=ethereum                   # ethereum, solana, custom
+WEB3_RPC_URL=https://eth.llamarpc.com
+WEB3_NETWORK=mainnet                  # mainnet, testnet, devnet
+```
+
+**Messaging (Optional):**
+```env
+MESSAGING_PROVIDER=slack              # slack, discord
+MESSAGING_TOKEN=your-bot-token
+```
+
+**Storage (Optional):**
+```env
+STORAGE_PROVIDER=postgres             # postgres, redis, s3, ipfs
+STORAGE_CONNECTION_STRING=postgresql://...
+STORAGE_ENDPOINT=https://...          # for S3/IPFS
+STORAGE_BUCKET=your-bucket-name       # for S3
+```
+
+**Notes:**
+- Install vector stores separately: `pip install -r requirements.txt` includes commented optional dependencies
+- For production, use secret management (GitHub Secrets, AWS Secrets Manager, etc.)
+- Linux compatibility: All dependencies support Ubuntu 20.04+
+
 ### Backend (.env)
 
 ```env
@@ -294,39 +374,133 @@ GitHub Actions automatically runs on push/PR to main:
 1. **Python Backend Job**: Runs ruff linter and pytest
 2. **Node Frontend Job**: Runs ESLint and builds Next.js app
 3. **Contracts Job**: Compiles contracts and runs Hardhat tests
+4. **Container Deploy Job**: Builds and pushes Docker images to ghcr.io (on main merge or manual dispatch)
 
-See `.github/workflows/ci-cd.yml` for configuration.
+### Container Deployment
+
+The workflow includes automated container builds for backend and frontend:
+
+**Trigger Methods:**
+- Automatic on merge to `main` branch (dev environment)
+- Manual workflow dispatch with environment selection (dev/stage/prod)
+
+**Container Registry:**
+- Backend image: `ghcr.io/lippytm/web3ai/backend`
+- Frontend image: `ghcr.io/lippytm/web3ai/frontend`
+
+**Environment Matrix:**
+- `dev`: Development environment (auto-deploy on main)
+- `stage`: Staging environment (manual dispatch)
+- `prod`: Production environment (manual dispatch)
+
+**Required GitHub Secrets/Variables:**
+- `GITHUB_TOKEN`: Automatic (for ghcr.io push)
+- `OPENAI_API_KEY`: Secret for OpenAI access
+- `AI_PROVIDER`, `VECTOR_PROVIDER`, `WEB3_CHAIN`, `WEB3_RPC_URL`: Repository variables
+- `MESSAGING_PROVIDER`, `STORAGE_PROVIDER`: Repository variables
+- `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_RPC_URL`, `NEXT_PUBLIC_CHAIN_ID`: Repository variables
+
+See `.github/workflows/ci-cd.yml` for full configuration.
 
 ## 📦 Dependencies
 
 ### Backend (Python)
 
+**Core Framework:**
 - `fastapi`: Modern web framework
 - `uvicorn[standard]`: ASGI server
 - `pydantic`: Data validation
+- `pydantic-settings`: Settings management
 - `httpx`: Async HTTP client
+- `python-dotenv`: Environment variable loading
+
+**AI Stack:**
+- `openai`: OpenAI API client
+- `transformers`: Hugging Face transformers
+- `huggingface-hub`: Hugging Face model hub
+- `langchain`: LLM orchestration framework
+- `langchain-openai`: OpenAI integration for LangChain
+- `llama-index`: Data framework for LLMs
+
+**Web3 Stack:**
 - `web3`: Ethereum library
-- `langchain-openai`: OpenAI integration
+- `solana`: Solana blockchain library
+
+**Messaging:**
+- `slack-sdk`: Slack API client
+- `discord.py`: Discord API client
+
+**Data Storage:**
+- `asyncpg`: Async PostgreSQL driver
+- `redis`: Redis client
+- `boto3`: AWS SDK for S3
+- `ipfshttpclient`: IPFS HTTP client
+
+**Development & Testing:**
 - `pytest`: Testing framework
-- `ruff`: Linter and formatter
+- `pytest-asyncio`: Async test support
+- `ruff`: Fast Python linter/formatter
 - `black`: Code formatter
+
+**Optional (Vector Stores):**
+- `pinecone-client`: Pinecone vector database
+- `weaviate-client`: Weaviate vector search
+- `chromadb`: Chroma embeddings database
 
 ### Frontend (Node/TypeScript)
 
+**Core Framework:**
 - `next`: React framework
 - `react`: UI library
+- `react-dom`: React DOM renderer
 - `typescript`: Type safety
-- `eslint`: Linter
-- `prettier`: Code formatter
-- `@typescript-eslint/*`: TypeScript ESLint plugins
+
+**AI Stack:**
+- `openai`: OpenAI API client
+- `@huggingface/inference`: Hugging Face inference
+- `langchain`: LLM orchestration
+- `llamaindex`: Data framework for LLMs
+
+**Web3 Stack:**
 - `ethers`: Ethereum library
 - `viem`: Modern Ethereum library
 - `wagmi`: React hooks for Ethereum
+- `@solana/web3.js`: Solana JavaScript API
+- `@coral-xyz/anchor`: Solana framework
+
+**Messaging:**
+- `@slack/web-api`: Slack Web API client
+- `discord.js`: Discord API client
+
+**Data Storage:**
+- `pg`: PostgreSQL client
+- `ioredis`: Redis client
+- `@aws-sdk/client-s3`: AWS S3 client
+- `ipfs-http-client`: IPFS HTTP client
+
+**Development & Styling:**
+- `eslint`: Linter
+- `prettier`: Code formatter
+- `@typescript-eslint/*`: TypeScript ESLint plugins
+- `tailwindcss`: Utility-first CSS framework
+- `postcss`: CSS processing
+- `autoprefixer`: CSS vendor prefixing
 
 ### Contracts (Hardhat)
 
 - `hardhat`: Development environment
 - `@nomicfoundation/hardhat-toolbox`: Hardhat plugins bundle
+- `dotenv`: Environment variables
+
+### SDK Adapters
+
+**Multi-language support:**
+- TypeScript/Node.js: `@lippytm/ai-sdk`
+- Python: `ai_sdk` module
+- Go: `aisdk` package
+- Rust: `aisdk` crate
+
+See `sdk/` directory for language-specific adapters with factory/config patterns.
 
 ## 🛠️ Development Workflow
 
