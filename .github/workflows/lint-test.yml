@@ -14,7 +14,7 @@ jobs:
   python-lint-test:
     name: Python Lint & Test
     runs-on: ubuntu-latest
-    if: hashFiles('backend/requirements.txt') != ''
+    if: hashFiles('backend/requirements.txt')
     permissions:
       contents: read
 
@@ -82,19 +82,19 @@ jobs:
       - name: Run linter
         working-directory: ./${{ matrix.directory }}
         run: |
-          if [ -f "package.json" ] && grep -q '"lint"' package.json; then
-            npm run lint
-          else
+          if npm run lint --silent 2>&1 | grep -q "missing script"; then
             echo "No lint script found, skipping"
+          else
+            npm run lint
           fi
 
       - name: Check formatting
         working-directory: ./${{ matrix.directory }}
         run: |
-          if [ -f "package.json" ] && grep -q '"format:check"' package.json; then
-            npm run format:check
-          else
+          if npm run format:check --silent 2>&1 | grep -q "missing script"; then
             echo "No format:check script found, skipping"
+          else
+            npm run format:check
           fi
 
       - name: Run tests
@@ -104,8 +104,8 @@ jobs:
       - name: Build
         working-directory: ./${{ matrix.directory }}
         run: |
-          if [ -f "package.json" ] && grep -q '"build"' package.json; then
-            npm run build
-          else
+          if npm run build --silent 2>&1 | grep -q "missing script"; then
             echo "No build script found, skipping"
+          else
+            npm run build
           fi

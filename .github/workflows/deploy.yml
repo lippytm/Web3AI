@@ -154,7 +154,9 @@ jobs:
   deploy-matrix:
     name: Deploy to Multiple Environments
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false  # Set to true to enable multi-environment deploy
+    # Enable this job by setting ENABLE_MULTI_ENV_DEPLOY to 'true' in repository variables
+    # or by removing this condition to enable multi-environment deployment on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_MULTI_ENV_DEPLOY == 'true'
     strategy:
       matrix:
         environment: [dev, stage]  # Add 'prod' when ready for production deployments
