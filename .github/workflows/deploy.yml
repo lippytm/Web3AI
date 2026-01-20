@@ -25,9 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: ${{ inputs.environment || 'dev' }}
-    strategy:
-      matrix:
-        environment: ${{ inputs.environment && fromJSON(format('["{0}"]', inputs.environment)) || fromJSON('["dev"]') }}
     permissions:
       contents: read
       id-token: write
@@ -76,7 +73,7 @@ jobs:
 
       - name: Load environment variables
         run: |
-          echo "Environment: ${{ matrix.environment }}"
+          echo "Environment: ${{ inputs.environment || 'dev' }}"
           # Required secrets/variables for deployment:
           # WEB3_RPC_URL: Blockchain RPC endpoint
           # OPENAI_API_KEY: OpenAI API key for AI features
@@ -116,7 +113,7 @@ jobs:
       # Deployment steps (customize based on your deployment target)
       - name: Deploy Backend
         run: |
-          echo "Deploying backend to ${{ matrix.environment }}"
+          echo "Deploying backend to ${{ inputs.environment || 'dev' }}"
           # Add your backend deployment commands here
           # Examples:
           # - Deploy to AWS Lambda, ECS, or EC2
@@ -127,7 +124,7 @@ jobs:
 
       - name: Deploy Frontend
         run: |
-          echo "Deploying frontend to ${{ matrix.environment }}"
+          echo "Deploying frontend to ${{ inputs.environment || 'dev' }}"
           # Add your frontend deployment commands here
           # Examples:
           # - Deploy to AWS S3 + CloudFront
@@ -138,7 +135,7 @@ jobs:
       - name: Deploy Contracts (if needed)
         working-directory: ./contracts
         run: |
-          echo "Deploying smart contracts to ${{ matrix.environment }}"
+          echo "Deploying smart contracts to ${{ inputs.environment || 'dev' }}"
           # Add your contract deployment commands here
           # Only run for specific environments (e.g., stage, prod)
           # Requires PRIVATE_KEY secret for contract deployment
@@ -147,11 +144,11 @@ jobs:
       - name: Notify deployment status
         if: always()
         run: |
-          echo "Deployment to ${{ matrix.environment }} completed with status: ${{ job.status }}"
+          echo "Deployment to ${{ inputs.environment || 'dev' }} completed with status: ${{ job.status }}"
           # Add notification logic here (Slack, Discord, email, etc.)
           # Example using Slack:
           # curl -X POST -H 'Content-type: application/json' \
-          #   --data '{"text":"Deployment to ${{ matrix.environment }}: ${{ job.status }}"}' \
+          #   --data '{"text":"Deployment to ${{ inputs.environment || 'dev' }}: ${{ job.status }}"}' \
           #   ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy-matrix:
