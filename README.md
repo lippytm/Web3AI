@@ -1,5 +1,8 @@
 # Web3AI - AI + Web3 Starter Bundle
 
+[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com)
+[![Security Scan](https://github.com/lippytm/Web3AI/workflows/Security%20Scan%20and%20SBOM/badge.svg)](https://github.com/lippytm/Web3AI/actions/workflows/security-scan.yml)
+
 A comprehensive full-stack starter bundle combining AI capabilities with Web3 technology. This project provides a production-ready foundation for building decentralized applications with artificial intelligence features.
 
 ## 🌟 Features
@@ -10,6 +13,10 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
+- **Config Validation**: Runtime configuration validation with Pydantic and Zod
+- **Optional Telemetry**: OpenTelemetry integration for observability
+- **Security Scanning**: Automated Trivy vulnerability scanning and SBOM generation
+- **Dependency Management**: Automated updates via Renovate
 
 ## 📋 Prerequisites
 
@@ -102,7 +109,13 @@ NETWORK=mainnet
 
 # Application Settings
 DEBUG=false
+
+# Optional Telemetry (requires pip install -r requirements-extras.txt)
+TELEMETRY_ENABLED=false
+TELEMETRY_ENDPOINT=
 ```
+
+**Config Validation**: The backend automatically validates configuration on startup. Valid networks are: `mainnet`, `sepolia`, `goerli`, `localhost`.
 
 ### Frontend (.env.local)
 
@@ -116,7 +129,12 @@ NEXT_PUBLIC_CHAIN_ID=1
 
 # AI Model Configuration
 NEXT_PUBLIC_MODEL_NAME=GPT-5.1-Codex-Max
+
+# Optional Telemetry
+NEXT_PUBLIC_TELEMETRY_ENABLED=false
 ```
+
+**Config Validation**: Run `npm run config:validate` in the frontend directory to validate configuration without starting the server.
 
 ### Contracts (.env)
 
@@ -291,19 +309,55 @@ Update `ETH_RPC_URL` and `NEXT_PUBLIC_RPC_URL` in environment files.
 
 GitHub Actions automatically runs on push/PR to main:
 
-1. **Python Backend Job**: Runs ruff linter and pytest
-2. **Node Frontend Job**: Runs ESLint and builds Next.js app
-3. **Contracts Job**: Compiles contracts and runs Hardhat tests
+1. **Pre-commit Hooks Validation**: Validates code formatting and linting
+2. **Python Backend Job**: Runs ruff linter, config validation, and pytest
+3. **Node Frontend Job**: Runs ESLint, config validation, and builds Next.js app
+4. **Contracts Job**: Compiles contracts and runs Hardhat tests
 
 See `.github/workflows/ci-cd.yml` for configuration.
+
+## 🔒 Security & SBOM
+
+### Automated Security Scanning
+
+This project includes automated security scanning via Trivy:
+
+```bash
+# Security scans run automatically on:
+# - Weekly schedule (Monday 6:00 AM UTC)
+# - Push to main branch
+# - Pull requests to main
+# - Manual workflow dispatch
+```
+
+### SBOM Generation
+
+Software Bill of Materials (SBOM) is automatically generated for all components:
+- Overall project SBOM (SPDX format)
+- Backend SBOM (CycloneDX format)
+- Frontend SBOM (CycloneDX format)
+- Contracts SBOM (CycloneDX format)
+
+SBOMs are available as workflow artifacts after each security scan run.
+
+### Dependency Review
+
+Pull requests automatically trigger dependency review to:
+- Identify high-severity vulnerabilities
+- Block GPL-3.0 and AGPL-3.0 licenses
+- Review new dependencies
+
+See `.github/workflows/security-scan.yml` for configuration.
 
 ## 📦 Dependencies
 
 ### Backend (Python)
 
+**Core Dependencies:**
 - `fastapi`: Modern web framework
 - `uvicorn[standard]`: ASGI server
 - `pydantic`: Data validation
+- `pydantic-settings`: Settings management with validation
 - `httpx`: Async HTTP client
 - `web3`: Ethereum library
 - `langchain-openai`: OpenAI integration
@@ -311,22 +365,100 @@ See `.github/workflows/ci-cd.yml` for configuration.
 - `ruff`: Linter and formatter
 - `black`: Code formatter
 
+**Optional Heavy Dependencies** (install with `pip install -r requirements-extras.txt`):
+
+- **AI/ML Models**: 
+  - `transformers==4.48.0`: Hugging Face transformers (patched version)
+  - `torch==2.6.0`: PyTorch (patched version)
+  
+- **Vector Databases**:
+  - `pinecone-client`: Pinecone vector database
+  - `chromadb`: Chroma vector database
+  - `weaviate-client`: Weaviate vector database
+  
+- **Blockchain**:
+  - `anchorpy`: Solana/Anchor integration
+  
+- **Observability**:
+  - `opentelemetry-api`: OpenTelemetry API
+  - `opentelemetry-sdk`: OpenTelemetry SDK
+  - `opentelemetry-instrumentation-fastapi`: FastAPI instrumentation
+
+> **Note**: Heavy dependencies are optional to keep base installations lightweight. Only install what you need for your use case.
+
 ### Frontend (Node/TypeScript)
 
 - `next`: React framework
 - `react`: UI library
 - `typescript`: Type safety
+- `zod`: Runtime type validation
 - `eslint`: Linter
 - `prettier`: Code formatter
 - `@typescript-eslint/*`: TypeScript ESLint plugins
 - `ethers`: Ethereum library
 - `viem`: Modern Ethereum library
 - `wagmi`: React hooks for Ethereum
+- `husky`: Git hooks
+- `tsx`: TypeScript executor for scripts
 
 ### Contracts (Hardhat)
 
 - `hardhat`: Development environment
 - `@nomicfoundation/hardhat-toolbox`: Hardhat plugins bundle
+
+## 🔭 Telemetry (Optional)
+
+This project includes optional OpenTelemetry integration for observability with no vendor lock-in.
+
+### Enabling Telemetry
+
+**Backend:**
+```bash
+# In backend/.env
+TELEMETRY_ENABLED=true
+TELEMETRY_ENDPOINT=http://localhost:4318  # Your OTLP endpoint
+
+# Install telemetry dependencies
+pip install -r requirements-extras.txt
+```
+
+**Frontend:**
+```bash
+# In frontend/.env.local
+NEXT_PUBLIC_TELEMETRY_ENABLED=true
+```
+
+### Features
+
+- **OpenTelemetry Standards**: Uses OTLP (OpenTelemetry Protocol)
+- **No Vendor Lock-in**: Works with any OTLP-compatible backend
+- **FastAPI Instrumentation**: Automatic tracing for API endpoints
+- **Optional by Default**: Disabled unless explicitly enabled
+
+Compatible with: Jaeger, Zipkin, Grafana Tempo, Honeycomb, Datadog, New Relic, and more.
+
+## 🔄 Automated Dependency Updates
+
+This project uses [Renovate](https://renovatebot.com) for automated dependency updates.
+
+### Configuration
+
+- **Schedule**: Updates run weekly on Monday mornings (6:00 AM UTC)
+- **Grouped Updates**: Related dependencies are updated together
+- **Heavy Dependencies**: ML/AI packages update monthly
+- **Auto-merge**: Minor and patch updates for non-critical packages
+- **Security Alerts**: High-priority security updates are highlighted
+
+### Dependency Groups
+
+- **Python dependencies**: All backend dependencies
+- **Frontend dependencies**: Frontend npm packages
+- **Contract dependencies**: Smart contract packages
+- **Heavy ML dependencies**: Transformers, PyTorch (monthly updates)
+- **Vector databases**: Pinecone, Chroma, Weaviate
+- **GitHub Actions**: Workflow action updates
+
+See `renovate.json` for detailed configuration.
 
 ## 🛠️ Development Workflow
 
