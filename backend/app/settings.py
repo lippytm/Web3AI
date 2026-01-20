@@ -1,7 +1,8 @@
 """Application settings module."""
 
 from typing import Literal
-from pydantic import field_validator, HttpUrl
+
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,27 +12,27 @@ class Settings(BaseSettings):
     # API Settings
     app_name: str = "Web3AI API"
     debug: bool = False
-    
+
     # OpenAI Settings
     openai_api_key: str = ""
     model_name: str = "GPT-5.1-Codex-Max"
-    
+
     # Blockchain Settings
     eth_rpc_url: str = "https://eth.llamarpc.com"
     network: Literal["mainnet", "sepolia", "goerli", "localhost"] = "mainnet"
-    
+
     # Telemetry Settings (optional)
     telemetry_enabled: bool = False
     telemetry_endpoint: str = ""
-    
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
-        protected_namespaces=("settings_",)
+        protected_namespaces=("settings_",),
     )
-    
+
     @field_validator("eth_rpc_url")
     @classmethod
     def validate_rpc_url(cls, v: str) -> str:
@@ -41,7 +42,7 @@ class Settings(BaseSettings):
         if not (v.startswith("http://") or v.startswith("https://")):
             raise ValueError("eth_rpc_url must start with http:// or https://")
         return v
-    
+
     @field_validator("model_name")
     @classmethod
     def validate_model_name(cls, v: str) -> str:
@@ -53,10 +54,10 @@ class Settings(BaseSettings):
 
 def validate_config() -> Settings:
     """Validate configuration without network calls (smoke test).
-    
+
     Returns:
         Settings: Validated settings instance
-        
+
     Raises:
         ValueError: If configuration is invalid
     """

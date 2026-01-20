@@ -10,7 +10,7 @@ console.log('Running config validation smoke test...');
 try {
   // Test 1: Smoke test
   console.log('Test 1: Running smoke test...');
-  const result = smokeTestConfig();
+  smokeTestConfig();
   console.log('✓ Smoke test passed');
 
   // Test 2: Validate config

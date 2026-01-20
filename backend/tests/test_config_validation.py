@@ -1,7 +1,7 @@
 """Smoke tests for configuration validation."""
 
-import os
 import pytest
+
 from app.settings import Settings, validate_config
 
 
@@ -27,14 +27,14 @@ def test_rpc_url_validation():
     # Valid URLs
     settings = Settings(eth_rpc_url="https://eth.llamarpc.com")
     assert settings.eth_rpc_url == "https://eth.llamarpc.com"
-    
+
     settings = Settings(eth_rpc_url="http://localhost:8545")
     assert settings.eth_rpc_url == "http://localhost:8545"
-    
+
     # Invalid URL - no protocol
     with pytest.raises(ValueError, match="must start with http"):
         Settings(eth_rpc_url="eth.llamarpc.com")
-    
+
     # Empty URL
     with pytest.raises(ValueError, match="cannot be empty"):
         Settings(eth_rpc_url="")
@@ -45,11 +45,11 @@ def test_model_name_validation():
     # Valid model name
     settings = Settings(model_name="gpt-4")
     assert settings.model_name == "gpt-4"
-    
+
     # Empty model name
     with pytest.raises(ValueError, match="cannot be empty"):
         Settings(model_name="")
-    
+
     # Whitespace-only model name
     with pytest.raises(ValueError, match="cannot be empty"):
         Settings(model_name="   ")
@@ -61,7 +61,7 @@ def test_network_validation():
     for network in ["mainnet", "sepolia", "goerli", "localhost"]:
         settings = Settings(network=network)
         assert settings.network == network
-    
+
     # Invalid network - this will be caught by pydantic literal validation
     with pytest.raises(ValueError):
         Settings(network="invalid_network")
