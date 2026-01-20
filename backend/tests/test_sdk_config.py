@@ -1,17 +1,20 @@
 """Tests for SDK config loaders."""
 
-import os
-
-import pytest
-
-# Add sdk directory to path
 import sys
 from pathlib import Path
 
+# Add sdk directory to path before other imports
 sdk_path = Path(__file__).parent.parent.parent / "sdk" / "python"
 sys.path.insert(0, str(sdk_path))
 
-from ai_sdk import AISDK, AIConfig, AISDKFactory, SDKConfig, Web3Config
+import pytest  # noqa: E402
+from ai_sdk import (  # noqa: E402
+    AISDK,
+    AIConfig,
+    AISDKFactory,
+    SDKConfig,
+    Web3Config,
+)
 
 
 def test_sdk_create_with_config():
