@@ -1,0 +1,25 @@
+[package]
+name = "web3ai"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+# AI Stack
+async-openai = "0.25.1"
+tokenizers = "0.20.3"
+candle-core = "0.8.0"
+
+# Web3 Stack
+ethers = "2.0.14"
+solana-sdk = "2.1.4"
+solana-client = "2.1.4"
+anchor-lang = "0.30.1"
+
+# Messaging
+slack-morphism = { version = "2.5.0", features = ["hyper"] }
+serenity = { version = "0.12.2", features = ["client", "gateway", "rustls_backend"] }
+
+# Data
+tokio-postgres = "0.7.12"
+redis = { version = "0.27.5", features = ["tokio-comp"] }
+aws-sdk-s3 = "1.66.0"

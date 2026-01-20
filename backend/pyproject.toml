@@ -1,3 +1,16 @@
+[project]
+name = "web3ai-backend"
+version = "1.0.0"
+description = "Web3AI Backend with AI/Web3 Integration"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+vector-stores = [
+    "pinecone-client>=5.0.1",
+    "weaviate-client>=4.9.3",
+    "chromadb>=0.5.23",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
