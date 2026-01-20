@@ -155,4 +155,4 @@ If you have questions about security but don't have a vulnerability to report, p
 
 ---
 
-Last updated: 2026-01-20
+Last updated: January 2026
