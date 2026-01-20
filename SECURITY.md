@@ -17,14 +17,14 @@ We take the security of Web3AI seriously. If you believe you have found a securi
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to:
-- **Security Team**: security@example.com (replace with actual security contact)
-- **Maintainer**: @lippytm via GitHub private vulnerability reporting (if enabled)
+Instead, please report them using one of the following methods:
 
-Alternatively, you can use GitHub's private vulnerability reporting feature:
+**Preferred Method**: Use GitHub's private vulnerability reporting feature:
 1. Go to the "Security" tab of this repository
 2. Click "Report a vulnerability"
 3. Fill out the advisory form
+
+**Alternative Method**: Contact the maintainer @lippytm directly through GitHub
 
 ### What to Include
 
