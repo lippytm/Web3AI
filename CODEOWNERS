@@ -1,0 +1,42 @@
+# Code Owners for Web3AI
+# 
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, these users will be requested for
+# review when someone opens a pull request.
+#
+# Learn more about code owners: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback - applies to everything unless overridden below
+* @lippytm
+
+# Backend (Python/FastAPI)
+/backend/ @lippytm
+/backend/**/*.py @lippytm
+
+# Frontend (Next.js/TypeScript)
+/frontend/ @lippytm
+/frontend/**/*.ts @lippytm
+/frontend/**/*.tsx @lippytm
+
+# Smart Contracts (Solidity/Hardhat)
+/contracts/ @lippytm
+/contracts/**/*.sol @lippytm
+/contracts/**/*.js @lippytm
+
+# CI/CD and GitHub Actions
+/.github/ @lippytm
+/.github/workflows/ @lippytm
+
+# Documentation
+*.md @lippytm
+/docs/ @lippytm
+
+# Configuration files
+*.json @lippytm
+*.yml @lippytm
+*.yaml @lippytm
+*.toml @lippytm
+
+# Security and compliance
+/SECURITY.md @lippytm
+/LICENSE @lippytm

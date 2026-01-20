@@ -1,5 +1,10 @@
 # Web3AI - AI + Web3 Starter Bundle
 
+[![Lint and Test](https://github.com/lippytm/Web3AI/actions/workflows/lint-test.yml/badge.svg)](https://github.com/lippytm/Web3AI/actions/workflows/lint-test.yml)
+[![CodeQL](https://github.com/lippytm/Web3AI/actions/workflows/codeql.yml/badge.svg)](https://github.com/lippytm/Web3AI/actions/workflows/codeql.yml)
+[![Deploy](https://github.com/lippytm/Web3AI/actions/workflows/deploy.yml/badge.svg)](https://github.com/lippytm/Web3AI/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A comprehensive full-stack starter bundle combining AI capabilities with Web3 technology. This project provides a production-ready foundation for building decentralized applications with artificial intelligence features.
 
 ## 🌟 Features
