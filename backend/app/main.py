@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.settings import settings
+from app.telemetry import create_telemetry
 
 app = FastAPI(
     title=settings.app_name,
@@ -19,6 +20,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Optional telemetry (requires OpenTelemetry packages)
+telemetry = create_telemetry(
+    enabled=settings.telemetry_enabled,
+    endpoint=settings.telemetry_endpoint,
+    service_name=settings.app_name
+)
+telemetry.instrument_app(app)
 
 
 @app.get("/")

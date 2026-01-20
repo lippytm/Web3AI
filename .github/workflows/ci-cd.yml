@@ -10,6 +10,32 @@ permissions:
   contents: read
 
 jobs:
+  pre-commit:
+    name: Pre-commit Hooks Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+
   python-backend:
     name: Python Backend (Ruff + Pytest)
     runs-on: ubuntu-latest
@@ -31,6 +57,16 @@ jobs:
         working-directory: ./backend
         run: |
           pip install -r requirements.txt
+
+      - name: Validate backend config
+        working-directory: ./backend
+        env:
+          OPENAI_API_KEY: test-key
+          MODEL_NAME: GPT-5.1-Codex-Max
+          ETH_RPC_URL: https://eth.llamarpc.com
+          NETWORK: mainnet
+        run: |
+          python -c "from app.settings import validate_config; validate_config()"
 
       - name: Run Ruff linter
         working-directory: ./backend
@@ -72,6 +108,15 @@ jobs:
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm ci
+
+      - name: Validate frontend config
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+          NEXT_PUBLIC_RPC_URL: https://eth.llamarpc.com
+          NEXT_PUBLIC_CHAIN_ID: 1
+          NEXT_PUBLIC_MODEL_NAME: GPT-5.1-Codex-Max
+        run: npm run config:validate
 
       - name: Run ESLint
         working-directory: ./frontend
