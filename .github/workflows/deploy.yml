@@ -1,0 +1,176 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+        default: 'dev'
+
+permissions:
+  contents: read
+  id-token: write  # Required for OIDC authentication
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment || 'dev' }}
+    runs-on: ubuntu-latest
+    environment: 
+      name: ${{ inputs.environment || 'dev' }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      # OIDC Authentication Placeholder
+      # Configure OIDC with your cloud provider (AWS, Azure, GCP)
+      # Example for AWS:
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::ACCOUNT_ID:role/GitHubActionsRole
+      #     aws-region: us-east-1
+
+      # Example for Azure:
+      # - name: Azure Login
+      #   uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Example for GCP:
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     workload_identity_provider: 'projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID'
+      #     service_account: 'SERVICE_ACCOUNT@PROJECT_ID.iam.gserviceaccount.com'
+
+      - name: Load environment variables
+        run: |
+          echo "Environment: ${{ inputs.environment || 'dev' }}"
+          # Required secrets/variables for deployment:
+          # WEB3_RPC_URL: Blockchain RPC endpoint
+          # OPENAI_API_KEY: OpenAI API key for AI features
+          # SLACK_BOT_TOKEN: Slack integration (optional)
+          # DISCORD_BOT_TOKEN: Discord integration (optional)
+          # DB_URL: Database connection string
+          # S3_BUCKET: S3 bucket for static assets (if using AWS)
+          # 
+          # These should be configured as GitHub Secrets or Environment Variables
+          # in Settings > Secrets and variables > Actions
+          # or in Settings > Environments > [environment-name]
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: pip install -r requirements.txt
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./frontend
+        env:
+          # Example environment-specific variables
+          NEXT_PUBLIC_API_URL: ${{ vars.API_URL || 'https://api-dev.example.com' }}
+          NEXT_PUBLIC_RPC_URL: ${{ secrets.WEB3_RPC_URL || 'https://eth.llamarpc.com' }}
+        run: npm run build
+
+      - name: Run backend tests
+        working-directory: ./backend
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'test-key-placeholder' }}
+          MODEL_NAME: GPT-5.1-Codex-Max
+          ETH_RPC_URL: ${{ secrets.WEB3_RPC_URL || 'https://eth.llamarpc.com' }}
+        run: pytest
+
+      # Deployment steps (customize based on your deployment target)
+      - name: Deploy Backend
+        run: |
+          echo "Deploying backend to ${{ inputs.environment || 'dev' }}"
+          # Add your backend deployment commands here
+          # Examples:
+          # - Deploy to AWS Lambda, ECS, or EC2
+          # - Deploy to Azure App Service or Container Instances
+          # - Deploy to GCP Cloud Run or App Engine
+          # - Deploy to Kubernetes cluster
+          # - Deploy to VPS via SSH
+
+      - name: Deploy Frontend
+        run: |
+          echo "Deploying frontend to ${{ inputs.environment || 'dev' }}"
+          # Add your frontend deployment commands here
+          # Examples:
+          # - Deploy to AWS S3 + CloudFront
+          # - Deploy to Vercel or Netlify
+          # - Deploy to Azure Static Web Apps
+          # - Deploy to GCP Cloud Storage + Cloud CDN
+
+      - name: Deploy Contracts (if needed)
+        working-directory: ./contracts
+        run: |
+          echo "Deploying smart contracts to ${{ inputs.environment || 'dev' }}"
+          # Add your contract deployment commands here
+          # Only run for specific environments (e.g., stage, prod)
+          # Requires PRIVATE_KEY secret for contract deployment
+          # Example: npx hardhat run scripts/deploy.js --network <network>
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          echo "Deployment to ${{ inputs.environment || 'dev' }} completed with status: ${{ job.status }}"
+          # Add notification logic here (Slack, Discord, email, etc.)
+          # Example using Slack:
+          # curl -X POST -H 'Content-type: application/json' \
+          #   --data '{"text":"Deployment to ${{ inputs.environment || 'dev' }}: ${{ job.status }}"}' \
+          #   ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  deploy-matrix:
+    name: Deploy to Multiple Environments
+    runs-on: ubuntu-latest
+    # Enable this job by setting ENABLE_MULTI_ENV_DEPLOY to 'true' in repository variables
+    # or by removing this condition to enable multi-environment deployment on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_MULTI_ENV_DEPLOY == 'true'
+    strategy:
+      matrix:
+        environment: [dev, stage]  # Add 'prod' when ready for production deployments
+    environment: 
+      name: ${{ matrix.environment }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to ${{ matrix.environment }}
+        run: |
+          echo "Deploying to ${{ matrix.environment }}"
+          # Reuse deployment steps from above
