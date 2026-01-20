@@ -26,9 +26,10 @@ def _get_tracer():
         return trace, TracerProvider, BatchSpanProcessor, ConsoleSpanExporter, FastAPIInstrumentor
     except ImportError:
         logger.warning(
-            "OpenTelemetry not installed. Install with: " "pip install -r requirements-extras.txt"
+            "OpenTelemetry not installed. Install with: pip install -r requirements-extras.txt"
         )
         return None, None, None, None, None
+
 
 
 class TelemetryStub:

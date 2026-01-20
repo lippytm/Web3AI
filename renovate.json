@@ -82,8 +82,7 @@
     }
   ],
   "vulnerabilityAlerts": {
-    "labels": ["security"],
-    "assignees": ["@lippytm"]
+    "labels": ["security"]
   },
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,

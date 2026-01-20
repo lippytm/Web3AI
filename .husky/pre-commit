@@ -6,11 +6,14 @@ echo "Running pre-commit hooks..."
 
 # Run pre-commit (Python linting for backend)
 if command -v pre-commit &> /dev/null; then
-  pre-commit run --files $(git diff --cached --name-only --diff-filter=ACM)
+  pre-commit run --files $(git diff --cached --name-only --diff-filter=ACM) || exit 1
 fi
 
 # Run frontend linting for staged frontend files
 if git diff --cached --name-only | grep -q "^frontend/"; then
   echo "Running frontend linting..."
-  cd frontend && npm run lint --fix && npm run format
+  (cd frontend && npm run lint --fix && npm run format) || exit 1
 fi
+
+exit 0
+
