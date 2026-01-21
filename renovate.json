@@ -1,0 +1,94 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":enablePreCommit",
+    "group:allNonMajor"
+  ],
+  "schedule": [
+    "before 6am on Monday"
+  ],
+  "timezone": "UTC",
+  "labels": ["dependencies"],
+  "assigneesFromCodeOwners": true,
+  "reviewersFromCodeOwners": true,
+  "packageRules": [
+    {
+      "description": "Group Python dependencies",
+      "matchManagers": ["pip_requirements"],
+      "groupName": "Python dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "description": "Group npm dependencies by workspace",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["frontend/package.json"],
+      "groupName": "Frontend dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "description": "Group contract dependencies",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["contracts/package.json"],
+      "groupName": "Contract dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "description": "Group heavy ML/AI dependencies separately",
+      "matchManagers": ["pip_requirements"],
+      "matchFileNames": ["backend/requirements-extras.txt"],
+      "matchPackageNames": [
+        "transformers",
+        "torch",
+        "tensorflow"
+      ],
+      "groupName": "Heavy ML dependencies",
+      "schedule": ["before 6am on the first day of the month"]
+    },
+    {
+      "description": "Group vector database dependencies",
+      "matchManagers": ["pip_requirements"],
+      "matchFileNames": ["backend/requirements-extras.txt"],
+      "matchPackageNames": [
+        "pinecone-client",
+        "chromadb",
+        "weaviate-client"
+      ],
+      "groupName": "Vector database dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "description": "Group GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "schedule": ["before 6am on Monday"],
+      "automerge": false
+    },
+    {
+      "description": "Auto-merge minor and patch updates for non-critical packages",
+      "matchUpdateTypes": ["minor", "patch"],
+      "excludePackageNames": [
+        "transformers",
+        "torch",
+        "next",
+        "react",
+        "hardhat"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  },
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "minimumReleaseAge": "3 days",
+  "ignoreTests": false,
+  "separateMajorMinor": true,
+  "separateMinorPatch": false,
+  "rangeStrategy": "bump"
+}

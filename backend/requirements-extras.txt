@@ -1,0 +1,19 @@
+# Optional heavy dependencies for advanced features
+# Install with: pip install -r requirements-extras.txt
+
+# AI/ML Models - Hugging Face Transformers
+transformers==4.48.0
+torch==2.6.0
+
+# Vector Databases
+pinecone-client==5.0.1
+chromadb==0.5.23
+weaviate-client==4.9.3
+
+# Solana/Anchor (if using Solana blockchain)
+anchorpy==0.20.1
+
+# OpenTelemetry (optional observability)
+opentelemetry-api==1.28.2
+opentelemetry-sdk==1.28.2
+opentelemetry-instrumentation-fastapi==0.49b2
