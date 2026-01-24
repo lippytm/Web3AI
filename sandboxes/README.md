@@ -2,6 +2,21 @@
 
 This directory contains sandboxes for testing, diagnosing, and simulating various components of the Web3AI project with full transparency. Each sandbox provides isolated environments for validating functionality and understanding system behavior.
 
+## 🚀 Quick Start
+
+**Fastest way to get started:**
+
+```bash
+cd sandboxes
+./quickstart.sh
+```
+
+The quickstart script will help you:
+1. Set up backend sandboxes with virtual environment
+2. Install dependencies and run tests
+3. Configure frontend sandbox pages
+4. Run contract compilation and tests
+
 ## 📁 Directory Structure
 
 ```
@@ -16,6 +31,7 @@ sandboxes/
 │   ├── SimpleStorage.sol           # Simple storage contract for testing
 │   ├── SimpleStorage.test.js       # Contract test suite
 │   └── deploy_sandbox.js           # Deployment script with diagnostics
+├── quickstart.sh        # Quick start automation script
 └── README.md            # This file
 ```
 
