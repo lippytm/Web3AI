@@ -12,6 +12,7 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Hardhat Smart Contracts**: Professional Solidity development environment
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
+- **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
 - **Config Validation**: Runtime configuration validation with Pydantic and Zod
 - **Optional Telemetry**: OpenTelemetry integration for observability
@@ -176,6 +177,11 @@ Web3AI/
 │   │   └── Lock.test.js       # Contract tests
 │   ├── hardhat.config.js
 │   └── package.json
+├── sandboxes/                  # Diagnostic and simulation sandboxes
+│   ├── backend/               # Backend diagnostics
+│   ├── frontend/              # Frontend component sandboxes
+│   ├── contracts/             # Contract testing sandboxes
+│   └── README.md              # Sandbox documentation
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml          # GitHub Actions CI/CD
@@ -209,6 +215,57 @@ cd contracts
 npm test                  # Run Hardhat tests
 npm run compile           # Compile contracts
 ```
+
+## 🔬 Sandboxes - Diagnostics & Simulations
+
+The project includes comprehensive sandboxes for transparent testing and validation:
+
+### Backend Sandboxes
+
+```bash
+# AI Model Diagnostics
+python sandboxes/backend/ai_diagnostics.py
+
+# Blockchain Interaction Simulation
+python sandboxes/backend/blockchain_simulation.py
+
+# Custom AI prompt testing
+python sandboxes/backend/ai_diagnostics.py --prompt "Your custom prompt"
+```
+
+### Frontend Sandboxes
+
+```bash
+# Web3 wallet connection testing (interactive UI)
+# Copy sandboxes/frontend/Web3Sandbox.tsx to your app
+
+# AI chat simulation (interactive UI)
+# Copy sandboxes/frontend/AIChatSimulation.tsx to your app
+```
+
+### Contract Sandboxes
+
+```bash
+cd contracts
+
+# Copy sandbox files
+cp ../sandboxes/contracts/SimpleStorage.sol contracts/
+cp ../sandboxes/contracts/SimpleStorage.test.js test/
+
+# Run sandbox tests
+npm test test/SimpleStorage.test.js
+
+# Deploy with diagnostics
+npx hardhat run ../sandboxes/contracts/deploy_sandbox.js --network localhost
+```
+
+**For detailed documentation**, see [sandboxes/README.md](sandboxes/README.md)
+
+**Purpose**: Sandboxes provide transparency in:
+- AI model behavior and responses
+- Blockchain connectivity and transactions
+- Web3 wallet interactions
+- Smart contract execution and gas usage
 
 ## 🎨 Linting & Formatting
 
