@@ -109,7 +109,8 @@ When using tools, follow this format:
         Returns:
             Information about Web3 topic
         """
-        return f"Web3 information about: {query} - This is a placeholder implementation."
+        # TODO: Implement actual Web3 information retrieval
+        return f"Web3 information about: {query} - This is a placeholder implementation. Replace with actual Web3 knowledge base integration."
 
     def _explore_blockchain(self, query: str) -> str:
         """Explore blockchain data.
@@ -120,7 +121,8 @@ When using tools, follow this format:
         Returns:
             Blockchain exploration results
         """
-        return f"Blockchain exploration for: {query} - This is a placeholder implementation."
+        # TODO: Implement actual blockchain data exploration using web3.py or ethers
+        return f"Blockchain exploration for: {query} - This is a placeholder implementation. Replace with actual blockchain API integration."
 
     def _smart_contract_help(self, query: str) -> str:
         """Get smart contract help.
@@ -131,7 +133,8 @@ When using tools, follow this format:
         Returns:
             Smart contract guidance
         """
-        return f"Smart contract help for: {query} - This is a placeholder implementation."
+        # TODO: Implement actual smart contract analysis and guidance
+        return f"Smart contract help for: {query} - This is a placeholder implementation. Replace with actual Solidity analysis tools."
 
     async def run(self, input_text: str, chat_history: list | None = None) -> dict[str, Any]:
         """Run the agent with given input.

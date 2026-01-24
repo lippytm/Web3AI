@@ -48,9 +48,13 @@ export interface ProvidersResponse {
  */
 export class AIClient {
   private baseUrl: string;
+  private defaultProvider: 'openai' | 'claude';
 
-  constructor(baseUrl?: string) {
+  constructor(baseUrl?: string, defaultProvider?: 'openai' | 'claude') {
     this.baseUrl = baseUrl || getConfig().NEXT_PUBLIC_API_URL;
+    // Use configured AI provider or default to Claude
+    const config = getConfig();
+    this.defaultProvider = defaultProvider || (config.NEXT_PUBLIC_AI_PROVIDER === 'openai' ? 'openai' : 'claude');
   }
 
   /**
@@ -76,7 +80,7 @@ export class AIClient {
       },
       body: JSON.stringify({
         ...request,
-        provider: request.provider || 'claude',
+        provider: request.provider || this.defaultProvider,
       }),
     });
 
@@ -101,7 +105,7 @@ export class AIClient {
       },
       body: JSON.stringify({
         ...request,
-        provider: request.provider || 'claude',
+        provider: request.provider || this.defaultProvider,
         stream: true,
       }),
     });
@@ -136,7 +140,7 @@ export class AIClient {
       },
       body: JSON.stringify({
         ...request,
-        provider: request.provider || 'claude',
+        provider: request.provider || this.defaultProvider,
       }),
     });
 
@@ -159,7 +163,7 @@ export class AIClient {
       body: JSON.stringify({
         ...request,
         agent_type: request.agent_type || 'general',
-        provider: request.provider || 'claude',
+        provider: request.provider || this.defaultProvider,
       }),
     });
 

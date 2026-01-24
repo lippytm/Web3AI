@@ -95,7 +95,12 @@ class AIToolsManager:
 
         # Get response
         response = await model.ainvoke(lc_messages)
-        return response.content
+        # Ensure response content is a string
+        content = response.content
+        if isinstance(content, list):
+            # Handle multi-part content by joining
+            content = " ".join(str(part) for part in content)
+        return str(content)
 
     async def stream_chat(
         self,
@@ -158,7 +163,12 @@ class AIToolsManager:
         chain = prompt | model
 
         response = await chain.ainvoke(variables)
-        return response.content
+        # Ensure response content is a string
+        content = response.content
+        if isinstance(content, list):
+            # Handle multi-part content by joining
+            content = " ".join(str(part) for part in content)
+        return str(content)
 
     def get_available_providers(self) -> list[str]:
         """Get list of available AI providers.
