@@ -1,6 +1,7 @@
 """AI tools and utilities for Claude and OpenAI integration."""
 
-from typing import Any, AsyncIterator, Dict, List, Optional
+from collections.abc import AsyncIterator
+from typing import Any
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
@@ -15,8 +16,8 @@ class AIToolsManager:
 
     def __init__(self):
         """Initialize AI tools manager."""
-        self.openai_model: Optional[ChatOpenAI] = None
-        self.claude_model: Optional[ChatAnthropic] = None
+        self.openai_model: ChatOpenAI | None = None
+        self.claude_model: ChatAnthropic | None = None
         self._initialize_models()
 
     def _initialize_models(self):
@@ -60,9 +61,9 @@ class AIToolsManager:
 
     async def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         provider: str = "claude",
-        system_prompt: Optional[str] = None,
+        system_prompt: str | None = None,
     ) -> str:
         """Send chat messages and get response.
 
@@ -77,7 +78,7 @@ class AIToolsManager:
         model = self.get_model(provider)
 
         # Convert messages to LangChain format
-        lc_messages: List[BaseMessage] = []
+        lc_messages: list[BaseMessage] = []
         if system_prompt:
             lc_messages.append(SystemMessage(content=system_prompt))
 
@@ -98,9 +99,9 @@ class AIToolsManager:
 
     async def stream_chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         provider: str = "claude",
-        system_prompt: Optional[str] = None,
+        system_prompt: str | None = None,
     ) -> AsyncIterator[str]:
         """Stream chat messages and get response.
 
@@ -115,7 +116,7 @@ class AIToolsManager:
         model = self.get_model(provider)
 
         # Convert messages to LangChain format
-        lc_messages: List[BaseMessage] = []
+        lc_messages: list[BaseMessage] = []
         if system_prompt:
             lc_messages.append(SystemMessage(content=system_prompt))
 
@@ -138,7 +139,7 @@ class AIToolsManager:
     async def generate_with_template(
         self,
         template: str,
-        variables: Dict[str, Any],
+        variables: dict[str, Any],
         provider: str = "claude",
     ) -> str:
         """Generate response using a prompt template.
@@ -159,7 +160,7 @@ class AIToolsManager:
         response = await chain.ainvoke(variables)
         return response.content
 
-    def get_available_providers(self) -> List[str]:
+    def get_available_providers(self) -> list[str]:
         """Get list of available AI providers.
 
         Returns:

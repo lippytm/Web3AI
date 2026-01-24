@@ -1,7 +1,8 @@
 """Tests for AI tools and Claude integration."""
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from app.ai_tools import AIToolsManager
 

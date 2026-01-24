@@ -1,6 +1,6 @@
 """AI agents and toolkits for autonomous AI workflows."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from langchain.agents import AgentExecutor, create_structured_chat_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -12,7 +12,7 @@ from app.ai_tools import ai_tools
 class Web3AIAgent:
     """AI agent with Web3 capabilities and structured reasoning."""
 
-    def __init__(self, provider: str = "claude", tools: Optional[List[Tool]] = None):
+    def __init__(self, provider: str = "claude", tools: list[Tool] | None = None):
         """Initialize Web3 AI agent.
 
         Args:
@@ -76,7 +76,7 @@ When using tools, follow this format:
             handle_parsing_errors=True,
         )
 
-    def _get_default_tools(self) -> List[Tool]:
+    def _get_default_tools(self) -> list[Tool]:
         """Get default tools for Web3 AI agent.
 
         Returns:
@@ -133,7 +133,7 @@ When using tools, follow this format:
         """
         return f"Smart contract help for: {query} - This is a placeholder implementation."
 
-    async def run(self, input_text: str, chat_history: Optional[List] = None) -> Dict[str, Any]:
+    async def run(self, input_text: str, chat_history: list | None = None) -> dict[str, Any]:
         """Run the agent with given input.
 
         Args:

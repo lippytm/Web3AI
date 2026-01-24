@@ -11,16 +11,20 @@ import { z } from 'zod';
 const envSchema = z.object({
   // Backend API URL
   NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:8000'),
-  
+
   // Blockchain RPC URL
   NEXT_PUBLIC_RPC_URL: z.string().url().default('https://eth.llamarpc.com'),
-  
+
   // Chain ID (1 for mainnet, 11155111 for sepolia, etc.)
   NEXT_PUBLIC_CHAIN_ID: z.coerce.number().int().positive().default(1),
-  
-  // AI Model name
+
+  // AI Model names
   NEXT_PUBLIC_MODEL_NAME: z.string().min(1).default('GPT-5.1-Codex-Max'),
-  
+  NEXT_PUBLIC_CLAUDE_MODEL_NAME: z.string().min(1).default('claude-3-5-sonnet-20241022'),
+
+  // AI Provider (openai, claude, or both)
+  NEXT_PUBLIC_AI_PROVIDER: z.enum(['openai', 'claude', 'both']).default('both'),
+
   // Optional telemetry settings
   NEXT_PUBLIC_TELEMETRY_ENABLED: z
     .string()
@@ -45,6 +49,8 @@ export function validateConfig(): EnvConfig {
     NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_MODEL_NAME: process.env.NEXT_PUBLIC_MODEL_NAME,
+    NEXT_PUBLIC_CLAUDE_MODEL_NAME: process.env.NEXT_PUBLIC_CLAUDE_MODEL_NAME,
+    NEXT_PUBLIC_AI_PROVIDER: process.env.NEXT_PUBLIC_AI_PROVIDER,
     NEXT_PUBLIC_TELEMETRY_ENABLED: process.env.NEXT_PUBLIC_TELEMETRY_ENABLED,
   };
 
@@ -74,7 +80,7 @@ export function getConfig(): EnvConfig {
 export function smokeTestConfig(): boolean {
   try {
     const config = validateConfig();
-    
+
     // Basic assertions (no network calls)
     if (!config.NEXT_PUBLIC_API_URL) {
       throw new Error('API URL must be set');
@@ -85,10 +91,13 @@ export function smokeTestConfig(): boolean {
     if (!config.NEXT_PUBLIC_MODEL_NAME) {
       throw new Error('Model name must be set');
     }
+    if (!config.NEXT_PUBLIC_CLAUDE_MODEL_NAME) {
+      throw new Error('Claude model name must be set');
+    }
     if (config.NEXT_PUBLIC_CHAIN_ID <= 0) {
       throw new Error('Chain ID must be positive');
     }
-    
+
     return true;
   } catch (error) {
     throw new Error(`Config validation failed: ${error}`);

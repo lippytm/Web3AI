@@ -1,8 +1,8 @@
 """Tests for AI API routes."""
 
-import pytest
-from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, patch
+
+from fastapi.testclient import TestClient
 
 from app.main import app
 
@@ -109,7 +109,7 @@ class TestAIRoutes:
         assert data["response"] == "Generated response"
         assert data["provider"] == "claude"
 
-    @patch("app.ai_routes.Web3AIAgent")
+    @patch("app.ai_agents.Web3AIAgent")
     def test_run_agent_general(self, mock_agent_class):
         """Test running general agent."""
         mock_agent = mock_agent_class.return_value

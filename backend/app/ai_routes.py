@@ -1,6 +1,6 @@
 """AI API routes for Claude and OpenAI integration."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
@@ -22,9 +22,9 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     """Chat request model."""
 
-    messages: List[ChatMessage] = Field(..., description="List of chat messages")
+    messages: list[ChatMessage] = Field(..., description="List of chat messages")
     provider: str = Field(default="claude", description="AI provider (openai/claude)")
-    system_prompt: Optional[str] = Field(None, description="Optional system prompt")
+    system_prompt: str | None = Field(None, description="Optional system prompt")
     stream: bool = Field(default=False, description="Whether to stream the response")
 
 
@@ -39,7 +39,7 @@ class TemplateRequest(BaseModel):
     """Template generation request."""
 
     template: str = Field(..., description="Prompt template with variables")
-    variables: Dict[str, Any] = Field(..., description="Variables to fill template")
+    variables: dict[str, Any] = Field(..., description="Variables to fill template")
     provider: str = Field(default="claude", description="AI provider (openai/claude)")
 
 
@@ -52,7 +52,7 @@ class AgentRequest(BaseModel):
         description="Agent type (general/code_analysis/blockchain_analyst/developer_assistant)",
     )
     provider: str = Field(default="claude", description="AI provider (openai/claude)")
-    chat_history: Optional[List[Dict[str, str]]] = Field(
+    chat_history: list[dict[str, str]] | None = Field(
         None, description="Optional chat history"
     )
 
@@ -61,13 +61,13 @@ class AgentResponse(BaseModel):
     """Agent response model."""
 
     output: str = Field(..., description="Agent output")
-    intermediate_steps: Optional[List] = Field(None, description="Intermediate reasoning steps")
+    intermediate_steps: list | None = Field(None, description="Intermediate reasoning steps")
 
 
 class ProvidersResponse(BaseModel):
     """Available providers response."""
 
-    providers: List[str] = Field(..., description="List of available providers")
+    providers: list[str] = Field(..., description="List of available providers")
 
 
 @router.get("/providers", response_model=ProvidersResponse)

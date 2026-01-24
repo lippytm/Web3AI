@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # Anthropic/Claude Settings
     anthropic_api_key: str = ""
     claude_model_name: str = "claude-3-5-sonnet-20241022"
-    
+
     # AI Provider Selection
     ai_provider: Literal["openai", "claude", "both"] = "both"
 
