@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.ai_routes import router as ai_router
 from app.settings import settings
 from app.telemetry import create_telemetry
 
@@ -25,6 +26,9 @@ telemetry = create_telemetry(
 )
 telemetry.instrument_app(app)
 
+# Include AI routes
+app.include_router(ai_router)
+
 
 @app.get("/")
 async def root():
@@ -44,6 +48,8 @@ async def api_info():
     return {
         "app_name": settings.app_name,
         "model_name": settings.model_name,
+        "claude_model_name": settings.claude_model_name,
+        "ai_provider": settings.ai_provider,
         "network": settings.network,
         "version": "1.0.0",
     }

@@ -17,6 +17,13 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     model_name: str = "GPT-5.1-Codex-Max"
 
+    # Anthropic/Claude Settings
+    anthropic_api_key: str = ""
+    claude_model_name: str = "claude-3-5-sonnet-20241022"
+    
+    # AI Provider Selection
+    ai_provider: Literal["openai", "claude", "both"] = "both"
+
     # Blockchain Settings
     eth_rpc_url: str = "https://eth.llamarpc.com"
     network: Literal["mainnet", "sepolia", "goerli", "localhost"] = "mainnet"
@@ -49,6 +56,14 @@ class Settings(BaseSettings):
         """Validate model name is not empty."""
         if not v or not v.strip():
             raise ValueError("model_name cannot be empty")
+        return v.strip()
+
+    @field_validator("claude_model_name")
+    @classmethod
+    def validate_claude_model_name(cls, v: str) -> str:
+        """Validate Claude model name is not empty."""
+        if not v or not v.strip():
+            raise ValueError("claude_model_name cannot be empty")
         return v.strip()
 
 
