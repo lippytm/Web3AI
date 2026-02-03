@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes import botbuilders, manychat, moltbook, openclaw
 from app.settings import settings
 from app.telemetry import create_telemetry
 
@@ -24,6 +25,12 @@ telemetry = create_telemetry(
     service_name=settings.app_name,
 )
 telemetry.instrument_app(app)
+
+# Register integration routers
+app.include_router(manychat.router)
+app.include_router(botbuilders.router)
+app.include_router(openclaw.router)
+app.include_router(moltbook.router)
 
 
 @app.get("/")
