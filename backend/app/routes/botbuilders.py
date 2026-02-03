@@ -27,7 +27,7 @@ class WebhookPayload(BaseModel):
     content: str
     timestamp: str
     channel: str = "web"
-    intent: str = None
+    intent: str | None = None
     entities: dict[str, Any] = {}
 
 
