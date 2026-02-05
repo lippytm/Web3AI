@@ -10,7 +10,11 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Python/FastAPI Backend**: High-performance async API with AI integration
 - **Next.js/TypeScript Frontend**: Modern React framework with full TypeScript support
 - **Hardhat Smart Contracts**: Professional Solidity development environment
-- **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
+- **AI Integration**: OpenAI GPT and Anthropic Claude support via LangChain
+  - Multiple AI providers (OpenAI, Claude, or both)
+  - AI chat and streaming capabilities
+  - AI agents with tools and reasoning
+  - Specialized agents for code analysis, blockchain analysis, and development assistance
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
@@ -104,6 +108,13 @@ npm run node
 OPENAI_API_KEY=your-openai-api-key-here
 MODEL_NAME=GPT-5.1-Codex-Max
 
+# Anthropic/Claude Configuration
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
+CLAUDE_MODEL_NAME=claude-3-5-sonnet-20241022
+
+# AI Provider Selection (openai, claude, or both)
+AI_PROVIDER=both
+
 # Blockchain Configuration
 ETH_RPC_URL=https://eth.llamarpc.com
 NETWORK=mainnet
@@ -130,6 +141,8 @@ NEXT_PUBLIC_CHAIN_ID=1
 
 # AI Model Configuration
 NEXT_PUBLIC_MODEL_NAME=GPT-5.1-Codex-Max
+NEXT_PUBLIC_CLAUDE_MODEL_NAME=claude-3-5-sonnet-20241022
+NEXT_PUBLIC_AI_PROVIDER=both
 
 # Optional Telemetry
 NEXT_PUBLIC_TELEMETRY_ENABLED=false
@@ -337,13 +350,83 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 ## 🤖 AI/LLM Configuration
 
-The backend uses OpenAI's API through LangChain for AI capabilities:
+The backend supports both OpenAI and Anthropic Claude AI models through LangChain:
 
-1. **Get API Key**: Sign up at [OpenAI Platform](https://platform.openai.com/)
-2. **Set Environment Variable**: Add `OPENAI_API_KEY` to `backend/.env`
-3. **Configure Model**: Set `MODEL_NAME=GPT-5.1-Codex-Max` (or your preferred model)
+### Getting API Keys
 
-The FastAPI backend exposes AI endpoints at `/api/info` and can be extended with custom AI routes.
+1. **OpenAI**: Sign up at [OpenAI Platform](https://platform.openai.com/)
+2. **Anthropic Claude**: Sign up at [Anthropic Console](https://console.anthropic.com/)
+
+### Configuration Options
+
+Set `AI_PROVIDER` in `backend/.env`:
+- `openai`: Use only OpenAI models
+- `claude`: Use only Anthropic Claude models  
+- `both`: Enable both providers (recommended)
+
+### AI Tools & Capabilities
+
+The backend includes a comprehensive AI toolkit:
+
+#### **1. Chat API**
+- Standard chat completions with both OpenAI and Claude
+- Streaming responses for real-time interactions
+- System prompts and conversation history support
+- Endpoint: `POST /api/ai/chat`
+
+#### **2. Template Generation**
+- Generate responses using prompt templates with variables
+- Dynamic content generation
+- Endpoint: `POST /api/ai/generate`
+
+#### **3. AI Agents with Tools**
+Autonomous AI agents that can use tools and reason through problems:
+
+- **General Agent**: Web3-focused assistant with blockchain knowledge
+- **Code Analysis Agent**: Analyze Solidity code, security audits, gas optimization
+- **Blockchain Analyst Agent**: Transaction analysis, wallet tracking, protocol analysis
+- **Developer Assistant Agent**: Code generation, debugging help, documentation
+
+Endpoint: `POST /api/ai/agent`
+
+#### **4. Available Providers**
+- Check configured providers: `GET /api/ai/providers`
+
+### Example Usage
+
+```python
+# Chat with Claude
+import httpx
+
+response = httpx.post("http://localhost:8000/api/ai/chat", json={
+    "messages": [
+        {"role": "user", "content": "Explain Ethereum smart contracts"}
+    ],
+    "provider": "claude"
+})
+print(response.json()["response"])
+
+# Run code analysis agent
+response = httpx.post("http://localhost:8000/api/ai/agent", json={
+    "input": "Analyze this contract for security issues: contract MyToken { ... }",
+    "agent_type": "code_analysis",
+    "provider": "claude"
+})
+print(response.json()["output"])
+```
+
+### Supported Models
+
+**OpenAI Models:**
+- GPT-4, GPT-5.1-Codex-Max, and newer models
+- Set via `MODEL_NAME` environment variable
+
+**Claude Models:**
+- claude-3-5-sonnet-20241022 (recommended)
+- claude-3-opus, claude-3-sonnet, claude-3-haiku
+- Set via `CLAUDE_MODEL_NAME` environment variable
+
+The FastAPI backend exposes comprehensive AI endpoints and can be easily extended with custom AI routes and agents.
 
 ## 🌐 RPC Configuration
 
@@ -418,6 +501,10 @@ See `.github/workflows/security-scan.yml` for configuration.
 - `httpx`: Async HTTP client
 - `web3`: Ethereum library
 - `langchain-openai`: OpenAI integration
+- `langchain-anthropic`: Anthropic Claude integration
+- `langchain-core`: LangChain core functionality
+- `langchain-community`: LangChain community integrations
+- `anthropic`: Anthropic Python SDK
 - `pytest`: Testing framework
 - `ruff`: Linter and formatter
 - `black`: Code formatter

@@ -10,6 +10,8 @@ def test_settings_defaults():
     settings = Settings()
     assert settings.app_name == "Web3AI API"
     assert settings.model_name == "GPT-5.1-Codex-Max"
+    assert settings.claude_model_name == "claude-3-5-sonnet-20241022"
+    assert settings.ai_provider == "both"
     assert settings.eth_rpc_url == "https://eth.llamarpc.com"
     assert settings.network == "mainnet"
     assert settings.telemetry_enabled is False
@@ -72,3 +74,30 @@ def test_telemetry_settings():
     settings = Settings(telemetry_enabled=True, telemetry_endpoint="http://localhost:4318")
     assert settings.telemetry_enabled is True
     assert settings.telemetry_endpoint == "http://localhost:4318"
+
+
+def test_claude_model_name_validation():
+    """Test Claude model name validation."""
+    # Valid model name
+    settings = Settings(claude_model_name="claude-3-5-sonnet-20241022")
+    assert settings.claude_model_name == "claude-3-5-sonnet-20241022"
+
+    # Empty model name
+    with pytest.raises(ValueError, match="cannot be empty"):
+        Settings(claude_model_name="")
+
+    # Whitespace-only model name
+    with pytest.raises(ValueError, match="cannot be empty"):
+        Settings(claude_model_name="   ")
+
+
+def test_ai_provider_validation():
+    """Test AI provider validation with literal types."""
+    # Valid providers
+    for provider in ["openai", "claude", "both"]:
+        settings = Settings(ai_provider=provider)
+        assert settings.ai_provider == provider
+
+    # Invalid provider - this will be caught by pydantic literal validation
+    with pytest.raises(ValueError):
+        Settings(ai_provider="invalid_provider")
