@@ -25,6 +25,23 @@ class Settings(BaseSettings):
     telemetry_enabled: bool = False
     telemetry_endpoint: str = ""
 
+    # Platform Integration Settings
+    # ManyChat
+    manychat_api_key: str = ""
+    manychat_webhook_secret: str = ""
+
+    # BotBuilders
+    botbuilders_api_token: str = ""
+    botbuilders_webhook_secret: str = ""
+
+    # OpenClaw
+    openclaw_api_key: str = ""
+    openclaw_webhook_secret: str = ""
+
+    # MoltBook
+    moltbook_api_token: str = ""
+    moltbook_webhook_secret: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

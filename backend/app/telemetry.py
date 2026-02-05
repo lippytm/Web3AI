@@ -31,7 +31,6 @@ def _get_tracer():
         return None, None, None, None, None
 
 
-
 class TelemetryStub:
     """Telemetry stub for optional OpenTelemetry integration."""
 

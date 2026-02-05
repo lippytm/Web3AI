@@ -12,6 +12,7 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Hardhat Smart Contracts**: Professional Solidity development environment
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
+- **Platform Integrations**: Built-in connectivity for ManyChat, BotBuilders, OpenClaw, and MoltBook
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
 - **Config Validation**: Runtime configuration validation with Pydantic and Zod
@@ -361,6 +362,51 @@ For production, consider using:
 - [QuickNode](https://www.quicknode.com/)
 
 Update `ETH_RPC_URL` and `NEXT_PUBLIC_RPC_URL` in environment files.
+
+## 🔗 Platform Integrations
+
+Web3AI includes built-in connectivity for popular messaging and bot platforms:
+
+- **ManyChat**: Facebook Messenger, WhatsApp, and Instagram bot integration
+- **BotBuilders**: Multi-channel bot building platform support
+- **OpenClaw**: Session-based conversational AI platform integration
+- **MoltBook**: Messaging and conversation management platform
+
+### Quick Setup
+
+Configure platform credentials in `backend/.env`:
+
+```env
+# ManyChat
+MANYCHAT_API_KEY=your-api-key
+MANYCHAT_WEBHOOK_SECRET=your-webhook-secret
+
+# BotBuilders
+BOTBUILDERS_API_TOKEN=your-token
+BOTBUILDERS_WEBHOOK_SECRET=your-secret
+
+# OpenClaw
+OPENCLAW_API_KEY=your-api-key
+OPENCLAW_WEBHOOK_SECRET=your-secret
+
+# MoltBook
+MOLTBOOK_API_TOKEN=your-token
+MOLTBOOK_WEBHOOK_SECRET=your-secret
+```
+
+### Integration Features
+
+Each platform integration includes:
+- ✅ Webhook endpoints for receiving messages
+- ✅ API endpoints for sending messages
+- ✅ User/subscriber management
+- ✅ Session and conversation handling
+- ✅ Webhook signature verification for security
+- ✅ Comprehensive test coverage
+
+**For detailed documentation**, see [INTEGRATIONS.md](INTEGRATIONS.md)
+
+**API Documentation**: Available at `http://localhost:8000/docs` when running the backend
 
 ## 🔄 CI/CD Pipeline
 
