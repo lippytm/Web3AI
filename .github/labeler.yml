@@ -1,0 +1,27 @@
+backend:
+  - changed-files:
+    - any-glob-to-any-file: 'backend/**'
+
+frontend:
+  - changed-files:
+    - any-glob-to-any-file: 'frontend/**'
+
+contracts:
+  - changed-files:
+    - any-glob-to-any-file: 'contracts/**'
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: ['*.md', 'docs/**']
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file: ['**/package.json', '**/package-lock.json', '**/requirements*.txt']
+
+workflows:
+  - changed-files:
+    - any-glob-to-any-file: '.github/workflows/**'
+
+security:
+  - changed-files:
+    - any-glob-to-any-file: ['.github/workflows/security-scan.yml', 'renovate.json']
