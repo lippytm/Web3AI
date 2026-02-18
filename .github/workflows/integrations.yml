@@ -169,6 +169,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    # Note: Some steps are duplicated in ai-coding-best-practices job for independence
+    # Each job is self-contained to maintain clarity and allow selective execution
 
     steps:
       - name: Checkout code
@@ -278,6 +280,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    # Note: Some steps are duplicated from security job for job independence
+    # This allows each job to run standalone and provides clear separation of concerns
 
     steps:
       - name: Checkout code

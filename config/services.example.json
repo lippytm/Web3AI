@@ -43,15 +43,16 @@
       "env_vars": {
         "BOTBUILDERS_API_KEY": {
           "required": true,
-          "description": "Your BotBuilders API token",
+          "description": "Your BotBuilders API token (use either this or BOTBUILDERS_API_TOKEN - they are interchangeable)",
           "example": "bb_token_...",
           "secret": true
         },
         "BOTBUILDERS_API_TOKEN": {
-          "required": true,
-          "description": "Alternative name for BotBuilders API key",
+          "required": false,
+          "description": "Alternative name for BOTBUILDERS_API_KEY - only needed if your integration uses this naming convention",
           "example": "bb_token_...",
-          "secret": true
+          "secret": true,
+          "note": "Interchangeable with BOTBUILDERS_API_KEY"
         },
         "BOTBUILDERS_WEBHOOK_SECRET": {
           "required": false,
@@ -69,15 +70,16 @@
       "env_vars": {
         "MOLTBOOK_API_KEY": {
           "required": true,
-          "description": "Your MoltBook API token",
+          "description": "Your MoltBook API token (use either this or MOLTBOOK_API_TOKEN - they are interchangeable)",
           "example": "mb_token_...",
           "secret": true
         },
         "MOLTBOOK_API_TOKEN": {
-          "required": true,
-          "description": "Alternative name for MoltBook API key",
+          "required": false,
+          "description": "Alternative name for MOLTBOOK_API_KEY - only needed if your integration uses this naming convention",
           "example": "mb_token_...",
-          "secret": true
+          "secret": true,
+          "note": "Interchangeable with MOLTBOOK_API_KEY"
         },
         "MOLTBOOK_WEBHOOK_SECRET": {
           "required": false,
