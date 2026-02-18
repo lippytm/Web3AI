@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout code
@@ -92,14 +94,14 @@ jobs:
 
       - name: Create build archive
         run: |
-          tar -czf web3ai-build-${{ needs.create-release.steps.version.outputs.version }}.tar.gz \
+          tar -czf web3ai-build-${{ needs.create-release.outputs.version }}.tar.gz \
             frontend/.next \
             contracts/artifacts
 
       - name: Upload build to release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.create-release.steps.version.outputs.version }}
+          tag_name: ${{ needs.create-release.outputs.version }}
           files: web3ai-build-*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
