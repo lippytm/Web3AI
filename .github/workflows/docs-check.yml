@@ -1,0 +1,19 @@
+name: Docs Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  docs-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify core docs exist
+        run: |
+          test -f PROJECT_ROLE.md
+          test -f SYSTEM_ARCHITECTURE.md
+          test -f REPO_LINKS.md
+      - name: List markdown files
+        run: find . -name "*.md" | sort
