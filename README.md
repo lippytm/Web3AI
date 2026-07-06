@@ -15,10 +15,13 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Platform Integrations**: Built-in connectivity for ManyChat, BotBuilders, OpenClaw, and MoltBook
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
+- **Advanced Automation**: Smart path filtering, auto-labeling, auto-merge, and release automation
+- **Performance Monitoring**: Lighthouse CI and pytest-benchmark for continuous performance tracking
+- **Code Quality**: Automated complexity analysis, security scanning, and test coverage reporting
 - **Config Validation**: Runtime configuration validation with Pydantic and Zod
 - **Optional Telemetry**: OpenTelemetry integration for observability
 - **Security Scanning**: Automated Trivy vulnerability scanning and SBOM generation
-- **Dependency Management**: Automated updates via Renovate
+- **Dependency Management**: Automated updates via Renovate with auto-merge for safe updates
 
 ## 📋 Prerequisites
 
@@ -408,16 +411,74 @@ Each platform integration includes:
 
 **API Documentation**: Available at `http://localhost:8000/docs` when running the backend
 
-## 🔄 CI/CD Pipeline
+## 🔄 CI/CD Pipeline & Automation
 
-GitHub Actions automatically runs on push/PR to main:
+This project includes comprehensive GitHub Actions workflows for automation and efficiency:
 
-1. **Pre-commit Hooks Validation**: Validates code formatting and linting
-2. **Python Backend Job**: Runs ruff linter, config validation, and pytest
-3. **Node Frontend Job**: Runs ESLint, config validation, and builds Next.js app
-4. **Contracts Job**: Compiles contracts and runs Hardhat tests
+### Core CI/CD Workflows
 
-See `.github/workflows/ci-cd.yml` for configuration.
+**CI/CD Pipeline** (`.github/workflows/ci-cd.yml`)
+- **Smart path filtering**: Only runs jobs for changed components
+- **Parallel execution**: Backend, frontend, and contracts jobs run concurrently
+- **Advanced caching**: Pip, npm, and pre-commit hook caches for faster builds
+- **Artifact management**: Uploads build artifacts and test results
+- Runs on: Push/PR to main and develop branches
+
+Jobs:
+1. **Change Detection**: Identifies which components have changes
+2. **Pre-commit Hooks**: Validates code formatting and linting (only if needed)
+3. **Python Backend**: Runs ruff linter, config validation, and pytest with coverage
+4. **Node Frontend**: Runs ESLint, config validation, builds Next.js app
+5. **Smart Contracts**: Compiles contracts and runs Hardhat tests
+
+### Automation Workflows
+
+**Auto-Labeling** (`.github/workflows/auto-label.yml`)
+- Automatically labels PRs based on changed files
+- Labels: backend, frontend, contracts, documentation, dependencies, workflows, security
+
+**PR Automation** (`.github/workflows/pr-automation.yml`)
+- **Size labeling**: Automatically labels PRs by size (xs, s, m, l, xl)
+- **Title validation**: Enforces conventional commit format
+- Supported types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+
+**Auto-merge for Dependencies** (`.github/workflows/auto-merge.yml`)
+- Automatically merges Renovate dependency update PRs after CI passes
+- Only for minor and patch updates
+- Squash merge strategy
+
+**Stale Management** (`.github/workflows/stale.yml`)
+- Marks inactive issues/PRs as stale
+- Issues: 60 days inactive → stale, 7 days later → closed
+- PRs: 30 days inactive → stale, 7 days later → closed
+- Exempt: pinned, security, good first issue, work-in-progress
+- Runs: Daily at 1:00 AM UTC
+
+### Quality & Performance
+
+**Code Quality** (`.github/workflows/code-quality.yml`)
+- **Complexity analysis**: Radon for Python code complexity metrics
+- **Security scanning**: Bandit for Python security issues
+- **Secret detection**: TruffleHog for exposed secrets
+- **Dependency auditing**: npm audit and safety for vulnerability checks
+- **Test coverage**: Codecov integration for coverage reporting
+- **TODO/FIXME tracking**: Reports technical debt comments
+
+**Performance Benchmarks** (`.github/workflows/performance.yml`)
+- **Frontend**: Lighthouse CI for web performance metrics
+- **Backend**: pytest-benchmark for API performance
+- **Tracking**: Stores benchmarks and alerts on 150% regression
+- Runs on: Push/PR to main and develop, or manual trigger
+
+### Release Automation
+
+**Release Workflow** (`.github/workflows/release.yml`)
+- **Automatic changelog**: Generated from PR labels and titles
+- **Build artifacts**: Compiles and packages frontend and contracts
+- **GitHub Releases**: Creates releases with artifacts and notes
+- Triggers: On version tags (v*.*.*) or manual dispatch
+
+See individual workflow files in `.github/workflows/` for detailed configuration.
 
 ## 🔒 Security & SBOM
 
