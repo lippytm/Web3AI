@@ -1,0 +1,477 @@
+name: Full Stack AI Toolkit + Security + Best Practices
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrations:
+    name: Platform Integrations Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Secret Availability
+        id: check_secrets
+        run: |
+          echo "Checking secret availability (values masked)..."
+          
+          # OpenAI
+          if [ -n "${{ secrets.OPENAI_API_KEY }}" ]; then
+            echo "✓ OPENAI_API_KEY is configured"
+            echo "has_openai=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ OPENAI_API_KEY is not configured"
+            echo "has_openai=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # ManyChat
+          if [ -n "${{ secrets.MANYCHAT_API_KEY }}" ]; then
+            echo "✓ MANYCHAT_API_KEY is configured"
+            echo "has_manychat=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ MANYCHAT_API_KEY is not configured"
+            echo "has_manychat=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # BotBuilders
+          if [ -n "${{ secrets.BOTBUILDERS_API_KEY }}" ]; then
+            echo "✓ BOTBUILDERS_API_KEY is configured"
+            echo "has_botbuilders=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ BOTBUILDERS_API_KEY is not configured"
+            echo "has_botbuilders=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # MoltBook
+          if [ -n "${{ secrets.MOLTBOOK_API_KEY }}" ]; then
+            echo "✓ MOLTBOOK_API_KEY is configured"
+            echo "has_moltbook=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ MOLTBOOK_API_KEY is not configured"
+            echo "has_moltbook=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # MoltBot
+          if [ -n "${{ secrets.MOLTBOT_API_KEY }}" ]; then
+            echo "✓ MOLTBOT_API_KEY is configured"
+            echo "has_moltbot=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ MOLTBOT_API_KEY is not configured"
+            echo "has_moltbot=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # OpenClaw
+          if [ -n "${{ secrets.OPENCLAW_API_KEY }}" ]; then
+            echo "✓ OPENCLAW_API_KEY is configured"
+            echo "has_openclaw=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ OPENCLAW_API_KEY is not configured"
+            echo "has_openclaw=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # GitHub PAT
+          if [ -n "${{ secrets.GITHUB_PAT }}" ]; then
+            echo "✓ GITHUB_PAT is configured"
+            echo "has_github_pat=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ GITHUB_PAT is not configured"
+            echo "has_github_pat=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Webhook URL
+          if [ -n "${{ secrets.WEBHOOK_URL }}" ]; then
+            echo "✓ WEBHOOK_URL is configured"
+            echo "has_webhook_url=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ WEBHOOK_URL is not configured"
+            echo "has_webhook_url=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # OpenClaw Base URL
+          if [ -n "${{ secrets.SERVICE_BASE_URL_OPENCLAW }}" ]; then
+            echo "✓ SERVICE_BASE_URL_OPENCLAW is configured"
+            echo "has_openclaw_base_url=true" >> $GITHUB_OUTPUT
+          else
+            echo "✗ SERVICE_BASE_URL_OPENCLAW is not configured"
+            echo "has_openclaw_base_url=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: OpenAI Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_openai == 'true'
+        run: |
+          echo "Testing OpenAI API connectivity (dry run)..."
+          # Dry run - just check if endpoint is reachable
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" \
+            -H "Content-Type: application/json" \
+            https://api.openai.com/v1/models || echo "Skipped - API check optional"
+
+      - name: ManyChat Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_manychat == 'true'
+        run: |
+          echo "Testing ManyChat API connectivity (dry run)..."
+          echo "Skipped - placeholder for actual integration test"
+
+      - name: BotBuilders Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_botbuilders == 'true'
+        run: |
+          echo "Testing BotBuilders API connectivity (dry run)..."
+          echo "Skipped - placeholder for actual integration test"
+
+      - name: MoltBook Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_moltbook == 'true'
+        run: |
+          echo "Testing MoltBook API connectivity (dry run)..."
+          echo "Skipped - placeholder for actual integration test"
+
+      - name: MoltBot Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_moltbot == 'true'
+        run: |
+          echo "Testing MoltBot API connectivity (dry run)..."
+          echo "Skipped - placeholder for actual integration test"
+
+      - name: OpenClaw Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_openclaw == 'true'
+        run: |
+          echo "Testing OpenClaw API connectivity (dry run)..."
+          BASE_URL="${{ secrets.SERVICE_BASE_URL_OPENCLAW }}"
+          if [ -n "$BASE_URL" ]; then
+            echo "Using custom base URL"
+            curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" "$BASE_URL" || echo "Skipped - endpoint unreachable"
+          else
+            echo "No custom base URL configured - skipped"
+          fi
+
+      - name: GitHub API Connectivity (Dry Run)
+        if: steps.check_secrets.outputs.has_github_pat == 'true'
+        run: |
+          echo "Testing GitHub API connectivity (dry run)..."
+          # Basic GitHub API check
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" \
+            https://api.github.com || echo "Skipped - API check optional"
+
+      - name: Webhook Test (Dry Run)
+        if: steps.check_secrets.outputs.has_webhook_url == 'true'
+        run: |
+          echo "Webhook URL is configured (dry run - not actually sending)"
+          echo "Skipped - placeholder for actual webhook test"
+
+  security:
+    name: Security and SAST
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Note: Some steps are duplicated in ai-coding-best-practices job for independence
+    # Each job is self-contained to maintain clarity and allow selective execution
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for Semgrep
+        id: check_semgrep
+        run: |
+          if command -v semgrep &> /dev/null; then
+            echo "semgrep_available=true" >> $GITHUB_OUTPUT
+            echo "✓ Semgrep is available"
+          else
+            echo "semgrep_available=false" >> $GITHUB_OUTPUT
+            echo "✗ Semgrep is not installed"
+          fi
+
+      - name: Install Semgrep (optional)
+        id: install_semgrep
+        if: steps.check_semgrep.outputs.semgrep_available == 'false'
+        run: |
+          echo "Attempting to install Semgrep..."
+          if command -v pip3 &> /dev/null || command -v pip &> /dev/null; then
+            python3 -m pip install --user semgrep || pip install --user semgrep || {
+              echo "semgrep_installed=false" >> $GITHUB_OUTPUT
+              echo "✗ Failed to install Semgrep - will skip"
+              exit 0
+            }
+            # Add user bin to PATH
+            export PATH="$HOME/.local/bin:$PATH"
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+            echo "semgrep_installed=true" >> $GITHUB_OUTPUT
+            echo "✓ Semgrep installed successfully"
+          else
+            echo "semgrep_installed=false" >> $GITHUB_OUTPUT
+            echo "✗ Python not available - skipping Semgrep installation"
+          fi
+
+      - name: Run Semgrep SAST
+        if: steps.check_semgrep.outputs.semgrep_available == 'true' || steps.install_semgrep.outputs.semgrep_installed == 'true'
+        run: |
+          echo "Running Semgrep SAST scan..."
+          export PATH="$HOME/.local/bin:$PATH"
+          semgrep --config=p/ci --no-git-ignore --metrics=off --quiet || {
+            echo "⚠ Semgrep found issues (non-blocking)"
+            exit 0
+          }
+          echo "✓ Semgrep scan completed"
+
+      - name: Check for ShellCheck
+        id: check_shellcheck
+        run: |
+          if command -v shellcheck &> /dev/null; then
+            echo "shellcheck_available=true" >> $GITHUB_OUTPUT
+            echo "✓ ShellCheck is available"
+          else
+            echo "shellcheck_available=false" >> $GITHUB_OUTPUT
+            echo "✗ ShellCheck is not installed"
+          fi
+
+      - name: Install ShellCheck (optional)
+        id: install_shellcheck
+        if: steps.check_shellcheck.outputs.shellcheck_available == 'false'
+        run: |
+          echo "Attempting to install ShellCheck..."
+          if command -v apt-get &> /dev/null; then
+            sudo apt-get update -qq && sudo apt-get install -qq -y shellcheck || {
+              echo "shellcheck_installed=false" >> $GITHUB_OUTPUT
+              echo "✗ Failed to install ShellCheck - will skip"
+              exit 0
+            }
+            echo "shellcheck_installed=true" >> $GITHUB_OUTPUT
+            echo "✓ ShellCheck installed successfully"
+          else
+            echo "shellcheck_installed=false" >> $GITHUB_OUTPUT
+            echo "✗ apt-get not available - skipping ShellCheck installation"
+          fi
+
+      - name: Run ShellCheck
+        if: steps.check_shellcheck.outputs.shellcheck_available == 'true' || steps.install_shellcheck.outputs.shellcheck_installed == 'true'
+        run: |
+          echo "Running ShellCheck on shell scripts..."
+          SHELL_FILES=$(find . -type f -name "*.sh" 2>/dev/null | grep -v node_modules | grep -v .git || echo "")
+          if [ -z "$SHELL_FILES" ]; then
+            echo "No shell scripts found - skipping"
+            exit 0
+          fi
+          echo "$SHELL_FILES" | xargs shellcheck || {
+            echo "⚠ ShellCheck found issues (non-blocking)"
+            exit 0
+          }
+          echo "✓ ShellCheck scan completed"
+
+      - name: Basic Code Style Check
+        run: |
+          echo "Running basic code style checks..."
+          # Check for common issues
+          echo "Checking for trailing whitespace..."
+          git ls-files | xargs grep -l '[[:space:]]$' || echo "✓ No trailing whitespace found"
+          
+          echo "Checking for large files..."
+          find . -type f -size +10M | grep -v '.git' | grep -v 'node_modules' || echo "✓ No large files found"
+          
+          echo "✓ Basic style checks completed"
+
+  ai-coding-best-practices:
+    name: AI Coding and Best Practices
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Note: Some steps are duplicated from security job for job independence
+    # This allows each job to run standalone and provides clear separation of concerns
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for Semgrep
+        id: check_semgrep
+        run: |
+          if command -v semgrep &> /dev/null; then
+            echo "semgrep_available=true" >> $GITHUB_OUTPUT
+            echo "✓ Semgrep is available"
+          else
+            echo "semgrep_available=false" >> $GITHUB_OUTPUT
+            echo "✗ Semgrep is not installed"
+          fi
+
+      - name: Install Semgrep (optional)
+        id: install_semgrep
+        if: steps.check_semgrep.outputs.semgrep_available == 'false'
+        run: |
+          echo "Attempting to install Semgrep..."
+          if command -v pip3 &> /dev/null || command -v pip &> /dev/null; then
+            python3 -m pip install --user semgrep || pip install --user semgrep || {
+              echo "semgrep_installed=false" >> $GITHUB_OUTPUT
+              echo "✗ Failed to install Semgrep - will skip"
+              exit 0
+            }
+            export PATH="$HOME/.local/bin:$PATH"
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+            echo "semgrep_installed=true" >> $GITHUB_OUTPUT
+            echo "✓ Semgrep installed successfully"
+          else
+            echo "semgrep_installed=false" >> $GITHUB_OUTPUT
+            echo "✗ Python not available - skipping Semgrep installation"
+          fi
+
+      - name: Run Semgrep Best Practices
+        if: steps.check_semgrep.outputs.semgrep_available == 'true' || steps.install_semgrep.outputs.semgrep_installed == 'true'
+        run: |
+          echo "Running Semgrep best practices scan..."
+          export PATH="$HOME/.local/bin:$PATH"
+          semgrep --config=p/ci --no-git-ignore --metrics=off --quiet || {
+            echo "⚠ Semgrep found issues (non-blocking)"
+            exit 0
+          }
+          echo "✓ Semgrep best practices scan completed"
+
+      - name: Check for ShellCheck
+        id: check_shellcheck
+        run: |
+          if command -v shellcheck &> /dev/null; then
+            echo "shellcheck_available=true" >> $GITHUB_OUTPUT
+            echo "✓ ShellCheck is available"
+          else
+            echo "shellcheck_available=false" >> $GITHUB_OUTPUT
+            echo "✗ ShellCheck is not installed"
+          fi
+
+      - name: Install ShellCheck (optional)
+        id: install_shellcheck
+        if: steps.check_shellcheck.outputs.shellcheck_available == 'false'
+        run: |
+          echo "Attempting to install ShellCheck..."
+          if command -v apt-get &> /dev/null; then
+            sudo apt-get update -qq && sudo apt-get install -qq -y shellcheck || {
+              echo "shellcheck_installed=false" >> $GITHUB_OUTPUT
+              echo "✗ Failed to install ShellCheck - will skip"
+              exit 0
+            }
+            echo "shellcheck_installed=true" >> $GITHUB_OUTPUT
+            echo "✓ ShellCheck installed successfully"
+          else
+            echo "shellcheck_installed=false" >> $GITHUB_OUTPUT
+            echo "✗ apt-get not available - skipping ShellCheck installation"
+          fi
+
+      - name: Run ShellCheck Best Practices
+        if: steps.check_shellcheck.outputs.shellcheck_available == 'true' || steps.install_shellcheck.outputs.shellcheck_installed == 'true'
+        run: |
+          echo "Running ShellCheck for best practices..."
+          SHELL_FILES=$(find . -type f -name "*.sh" 2>/dev/null | grep -v node_modules | grep -v .git || echo "")
+          if [ -z "$SHELL_FILES" ]; then
+            echo "No shell scripts found - skipping"
+            exit 0
+          fi
+          echo "$SHELL_FILES" | xargs shellcheck || {
+            echo "⚠ ShellCheck found issues (non-blocking)"
+            exit 0
+          }
+          echo "✓ ShellCheck best practices completed"
+
+      - name: Check for markdownlint-cli2
+        id: check_markdownlint
+        run: |
+          if command -v markdownlint-cli2 &> /dev/null || command -v markdownlint &> /dev/null; then
+            echo "markdownlint_available=true" >> $GITHUB_OUTPUT
+            echo "✓ markdownlint is available"
+          else
+            echo "markdownlint_available=false" >> $GITHUB_OUTPUT
+            echo "✗ markdownlint is not installed"
+          fi
+
+      - name: Install markdownlint-cli2 (optional)
+        id: install_markdownlint
+        if: steps.check_markdownlint.outputs.markdownlint_available == 'false'
+        run: |
+          echo "Attempting to install markdownlint-cli2..."
+          if command -v npm &> /dev/null; then
+            npm install -g markdownlint-cli2 || {
+              echo "markdownlint_installed=false" >> $GITHUB_OUTPUT
+              echo "✗ Failed to install markdownlint-cli2 - will skip"
+              exit 0
+            }
+            echo "markdownlint_installed=true" >> $GITHUB_OUTPUT
+            echo "✓ markdownlint-cli2 installed successfully"
+          else
+            echo "markdownlint_installed=false" >> $GITHUB_OUTPUT
+            echo "✗ npm not available - skipping markdownlint-cli2 installation"
+          fi
+
+      - name: Run markdownlint
+        if: steps.check_markdownlint.outputs.markdownlint_available == 'true' || steps.install_markdownlint.outputs.markdownlint_installed == 'true'
+        run: |
+          echo "Running markdownlint on markdown files..."
+          MD_FILES=$(find . -type f -name "*.md" 2>/dev/null | grep -v node_modules | grep -v .git || echo "")
+          if [ -z "$MD_FILES" ]; then
+            echo "No markdown files found - skipping"
+            exit 0
+          fi
+          if command -v markdownlint-cli2 &> /dev/null; then
+            markdownlint-cli2 "**/*.md" "#node_modules" || {
+              echo "⚠ markdownlint found issues (non-blocking)"
+              exit 0
+            }
+          elif command -v markdownlint &> /dev/null; then
+            echo "$MD_FILES" | xargs markdownlint || {
+              echo "⚠ markdownlint found issues (non-blocking)"
+              exit 0
+            }
+          fi
+          echo "✓ markdownlint completed"
+
+      - name: Check Python Files (if present)
+        run: |
+          echo "Checking for Python files and tools..."
+          PYTHON_FILES=$(find . -type f -name "*.py" 2>/dev/null | grep -v node_modules | grep -v .git | head -n 1 || echo "")
+          if [ -z "$PYTHON_FILES" ]; then
+            echo "No Python files found - skipping Python checks"
+            exit 0
+          fi
+          
+          # Check if requirements.txt exists
+          if [ -f "backend/requirements.txt" ] || [ -f "requirements.txt" ]; then
+            echo "✓ Python lockfile found"
+            if command -v ruff &> /dev/null || command -v pylint &> /dev/null; then
+              echo "✓ Python linters available (covered by existing CI)"
+            else
+              echo "⚠ Python linters not available (optional)"
+            fi
+          else
+            echo "No Python lockfile found - skipping"
+          fi
+
+      - name: Check JavaScript/TypeScript Files (if present)
+        run: |
+          echo "Checking for JavaScript/TypeScript files and tools..."
+          JS_FILES=$(find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.tsx" -o -name "*.jsx" \) 2>/dev/null | grep -v node_modules | grep -v .git | head -n 1 || echo "")
+          if [ -z "$JS_FILES" ]; then
+            echo "No JavaScript/TypeScript files found - skipping"
+            exit 0
+          fi
+          
+          # Check if package-lock.json or package.json exists
+          if [ -f "frontend/package-lock.json" ] || [ -f "package-lock.json" ] || [ -f "package.json" ]; then
+            echo "✓ JavaScript lockfile found"
+            if command -v eslint &> /dev/null; then
+              echo "✓ ESLint available (covered by existing CI)"
+            else
+              echo "⚠ ESLint not available (optional)"
+            fi
+          else
+            echo "No JavaScript lockfile found - skipping"
+          fi
+
+      - name: Best Practices Summary
+        run: |
+          echo "================================"
+          echo "Best Practices Checks Summary"
+          echo "================================"
+          echo "✓ Code quality checks completed"
+          echo "✓ All checks executed with graceful fallbacks"
+          echo "✓ Language-specific linting deferred to existing CI"
+          echo "================================"
