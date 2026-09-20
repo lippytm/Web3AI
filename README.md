@@ -11,6 +11,7 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Next.js/TypeScript Frontend**: Modern React framework with full TypeScript support
 - **Hardhat Smart Contracts**: Professional Solidity development environment
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
+- **AI Jarvis Assistant**: Built-in assistant branding with bundled free AI tools
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
 - **Platform Integrations**: Built-in connectivity for ManyChat, BotBuilders, OpenClaw, and MoltBook
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
@@ -104,6 +105,8 @@ npm run node
 # OpenAI Configuration
 OPENAI_API_KEY=your-openai-api-key-here
 MODEL_NAME=GPT-5.1-Codex-Max
+ASSISTANT_NAME=AI Jarvis Assistant
+ASSISTANT_TAGLINE=Always-on copilot for AI, automation, and Web3 workflows
 
 # Blockchain Configuration
 ETH_RPC_URL=https://eth.llamarpc.com
@@ -131,6 +134,7 @@ NEXT_PUBLIC_CHAIN_ID=1
 
 # AI Model Configuration
 NEXT_PUBLIC_MODEL_NAME=GPT-5.1-Codex-Max
+NEXT_PUBLIC_ASSISTANT_NAME=AI Jarvis Assistant
 
 # Optional Telemetry
 NEXT_PUBLIC_TELEMETRY_ENABLED=false
@@ -343,8 +347,22 @@ The backend uses OpenAI's API through LangChain for AI capabilities:
 1. **Get API Key**: Sign up at [OpenAI Platform](https://platform.openai.com/)
 2. **Set Environment Variable**: Add `OPENAI_API_KEY` to `backend/.env`
 3. **Configure Model**: Set `MODEL_NAME=GPT-5.1-Codex-Max` (or your preferred model)
+4. **Brand the Assistant**: Adjust `ASSISTANT_NAME` and `ASSISTANT_TAGLINE` for your Jarvis deployment
 
-The FastAPI backend exposes AI endpoints at `/api/info` and can be extended with custom AI routes.
+The FastAPI backend exposes AI endpoints at `/api/info` and `/api/assistant` and can be extended with custom AI routes.
+
+### Included Free AI Tools
+
+AI Jarvis Assistant ships with a starter catalog of free tools for:
+
+- Jarvis Chat Workspace
+- Prompt Lab
+- Code Copilot
+- Document Analyzer
+- Research Briefs
+- Image Studio
+- Voice Notes
+- Workflow Builder
 
 ## 🌐 RPC Configuration
 

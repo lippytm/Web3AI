@@ -20,6 +20,9 @@ const envSchema = z.object({
   
   // AI Model name
   NEXT_PUBLIC_MODEL_NAME: z.string().min(1).default('GPT-5.1-Codex-Max'),
+
+  // Assistant branding
+  NEXT_PUBLIC_ASSISTANT_NAME: z.string().min(1).default('AI Jarvis Assistant'),
   
   // Optional telemetry settings
   NEXT_PUBLIC_TELEMETRY_ENABLED: z
@@ -45,6 +48,7 @@ export function validateConfig(): EnvConfig {
     NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_MODEL_NAME: process.env.NEXT_PUBLIC_MODEL_NAME,
+    NEXT_PUBLIC_ASSISTANT_NAME: process.env.NEXT_PUBLIC_ASSISTANT_NAME,
     NEXT_PUBLIC_TELEMETRY_ENABLED: process.env.NEXT_PUBLIC_TELEMETRY_ENABLED,
   };
 
@@ -84,6 +88,9 @@ export function smokeTestConfig(): boolean {
     }
     if (!config.NEXT_PUBLIC_MODEL_NAME) {
       throw new Error('Model name must be set');
+    }
+    if (!config.NEXT_PUBLIC_ASSISTANT_NAME) {
+      throw new Error('Assistant name must be set');
     }
     if (config.NEXT_PUBLIC_CHAIN_ID <= 0) {
       throw new Error('Chain ID must be positive');

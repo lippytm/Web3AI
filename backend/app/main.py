@@ -33,10 +33,25 @@ app.include_router(openclaw.router)
 app.include_router(moltbook.router)
 
 
+def get_assistant_payload() -> dict[str, object]:
+    """Build assistant metadata payload."""
+    return {
+        "name": settings.assistant_name,
+        "tagline": settings.assistant_tagline,
+        "free_tools": list(settings.assistant_free_tools),
+        "tool_count": len(settings.assistant_free_tools),
+    }
+
+
 @app.get("/")
 async def root():
     """Root endpoint."""
-    return {"message": "Web3AI API", "version": "1.0.0", "status": "running"}
+    return {
+        "message": "Web3AI API",
+        "version": "1.0.0",
+        "status": "running",
+        "assistant": get_assistant_payload(),
+    }
 
 
 @app.get("/health")
@@ -53,4 +68,11 @@ async def api_info():
         "model_name": settings.model_name,
         "network": settings.network,
         "version": "1.0.0",
+        "assistant": get_assistant_payload(),
     }
+
+
+@app.get("/api/assistant")
+async def assistant_info():
+    """Assistant catalog endpoint."""
+    return get_assistant_payload()

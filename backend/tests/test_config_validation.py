@@ -10,6 +10,7 @@ def test_settings_defaults():
     settings = Settings()
     assert settings.app_name == "Web3AI API"
     assert settings.model_name == "GPT-5.1-Codex-Max"
+    assert settings.assistant_name == "AI Jarvis Assistant"
     assert settings.eth_rpc_url == "https://eth.llamarpc.com"
     assert settings.network == "mainnet"
     assert settings.telemetry_enabled is False
@@ -53,6 +54,16 @@ def test_model_name_validation():
     # Whitespace-only model name
     with pytest.raises(ValueError, match="cannot be empty"):
         Settings(model_name="   ")
+
+
+def test_assistant_metadata_validation():
+    """Test assistant metadata validation."""
+    settings = Settings(assistant_name=" Jarvis ", assistant_tagline=" Ready to help ")
+    assert settings.assistant_name == "Jarvis"
+    assert settings.assistant_tagline == "Ready to help"
+
+    with pytest.raises(ValueError, match="assistant metadata cannot be empty"):
+        Settings(assistant_name=" ")
 
 
 def test_network_validation():

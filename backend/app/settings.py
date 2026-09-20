@@ -16,6 +16,18 @@ class Settings(BaseSettings):
     # OpenAI Settings
     openai_api_key: str = ""
     model_name: str = "GPT-5.1-Codex-Max"
+    assistant_name: str = "AI Jarvis Assistant"
+    assistant_tagline: str = "Always-on copilot for AI, automation, and Web3 workflows"
+    assistant_free_tools: tuple[str, ...] = (
+        "Jarvis Chat Workspace",
+        "Prompt Lab",
+        "Code Copilot",
+        "Document Analyzer",
+        "Research Briefs",
+        "Image Studio",
+        "Voice Notes",
+        "Workflow Builder",
+    )
 
     # Blockchain Settings
     eth_rpc_url: str = "https://eth.llamarpc.com"
@@ -66,6 +78,14 @@ class Settings(BaseSettings):
         """Validate model name is not empty."""
         if not v or not v.strip():
             raise ValueError("model_name cannot be empty")
+        return v.strip()
+
+    @field_validator("assistant_name", "assistant_tagline")
+    @classmethod
+    def validate_assistant_text(cls, v: str) -> str:
+        """Validate assistant metadata is not empty."""
+        if not v or not v.strip():
+            raise ValueError("assistant metadata cannot be empty")
         return v.strip()
 
 
