@@ -13,6 +13,7 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
 - **Platform Integrations**: Built-in connectivity for ManyChat, BotBuilders, OpenClaw, and MoltBook
+- **AI Team Roles**: Includes AI Jarvis Assistant, Engineer Manager, and Communications Manager concepts for coordinated delivery
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions
 - **Production Ready**: Comprehensive testing, linting, and CI/CD pipelines
 - **Config Validation**: Runtime configuration validation with Pydantic and Zod
