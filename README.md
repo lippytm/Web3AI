@@ -11,6 +11,7 @@ A comprehensive full-stack starter bundle combining AI capabilities with Web3 te
 - **Next.js/TypeScript Frontend**: Modern React framework with full TypeScript support
 - **Hardhat Smart Contracts**: Professional Solidity development environment
 - **AI Integration**: OpenAI GPT-5.1-Codex-Max support via LangChain
+- **AI Jarvis Assistant**: Workflow, communications, and development management support
 - **Web3 Libraries**: ethers.js, viem, and wagmi for blockchain interactions
 - **Platform Integrations**: Built-in connectivity for ManyChat, BotBuilders, OpenClaw, and MoltBook
 - **Diagnostic Sandboxes**: Transparent testing environments for AI, blockchain, and Web3 interactions

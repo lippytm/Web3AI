@@ -9,12 +9,14 @@
 - project labs and experiments
 - applied development opportunities
 - builder progression for programming and blockchain development
+- AI Jarvis Assistant coordination for workflows, communications, and development
 
 ## Ecosystem Position
 ```text
 Control Tower
   -> standards and cross-repo governance
   -> Web3AI education and development hub
+  -> AI Jarvis Assistant workflow and communications management
   -> connected public and internal operations hubs
 ```
 
@@ -32,3 +34,4 @@ Control Tower
 
 ## Notes
 Use this repo to support diversified AI learning, blockchain learning, experimentation, and project-based development.
+AI Jarvis Assistant serves as the coordinating manager for workflow movement, communications continuity, and development execution inside this repo context.

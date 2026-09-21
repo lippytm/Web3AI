@@ -15,6 +15,8 @@ Allow the Control Tower to:
 - coordinate enterprise or premium operations
 - keep commerce state visible without tightly coupling business logic
 
+AI Jarvis Assistant should operate inside this flow as the management layer for workflow coordination, communications handoff, and development follow-through.
+
 ---
 
 ## Separation of Responsibility
@@ -32,6 +34,11 @@ Allow the Control Tower to:
 - fleet visibility
 - rollout governance
 - event aggregation
+
+### AI Jarvis Assistant owns
+- workflow management across development tasks
+- communications continuity across connected systems
+- development coordination aligned with tower policies
 
 This preserves clean lane boundaries.
 
