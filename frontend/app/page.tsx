@@ -54,14 +54,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {assistantRoles.map((role) => (
-              <article key={role.name} className="rounded-xl border bg-white p-5">
+              <li key={role.name} className="list-none">
+                <article className="h-full rounded-xl border bg-white p-5">
                 <h3 className="mb-2 text-xl font-semibold text-gray-900">{role.name}</h3>
                 <p className="text-gray-600">{role.focus}</p>
-              </article>
+                </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       </div>
     </main>
