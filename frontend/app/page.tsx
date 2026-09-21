@@ -49,7 +49,7 @@ export default function Home() {
         <section className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-left shadow-sm">
           <div className="mb-6 text-center">
             <h2 className="text-3xl font-semibold">AI Team Roles</h2>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-gray-700">
               Specialized assistants for product direction, engineering flow, and communications.
             </p>
           </div>
@@ -58,8 +58,8 @@ export default function Home() {
             {assistantRoles.map((role) => (
               <li key={role.name} className="list-none">
                 <article className="h-full rounded-xl border bg-white p-5">
-                <h3 className="mb-2 text-xl font-semibold text-gray-900">{role.name}</h3>
-                <p className="text-gray-600">{role.focus}</p>
+                  <h3 className="mb-2 text-xl font-semibold text-gray-900">{role.name}</h3>
+                  <p className="text-gray-700">{role.focus}</p>
                 </article>
               </li>
             ))}
