@@ -27,7 +27,7 @@ Creates landing page copy, ads, lore packs, launch posts, and educational conten
 ## 9. AI Jarvis Assistant
 Acts as the coordinating copilot that routes requests, summarizes priorities, and keeps the venture aligned.
 
-## 10. Engineer Manager
+## 10. Engineering Manager
 Translates venture goals into build plans, technical sequencing, and implementation oversight.
 
 ## 11. Communications Manager

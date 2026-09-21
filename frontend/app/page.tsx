@@ -19,7 +19,7 @@ const assistantRoles = [
     focus: "Acts as the command-center copilot for Web3AI workflows and decision support.",
   },
   {
-    name: "Engineer Manager",
+    name: "Engineering Manager",
     focus: "Coordinates implementation priorities, system readiness, and engineering execution.",
   },
   {
