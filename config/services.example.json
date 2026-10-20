@@ -1,0 +1,233 @@
+{
+  "description": "Web3AI Platform Services Configuration",
+  "note": "This is an example configuration file. Copy to services.json and configure with actual values. Never commit secrets to version control.",
+  "services": {
+    "openai": {
+      "description": "OpenAI API for AI/ML capabilities",
+      "env_vars": {
+        "OPENAI_API_KEY": {
+          "required": true,
+          "description": "Your OpenAI API key from https://platform.openai.com/api-keys",
+          "example": "sk-proj-...",
+          "secret": true
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.openai.com/v1",
+        "models": "/models",
+        "chat": "/chat/completions"
+      }
+    },
+    "manychat": {
+      "description": "ManyChat chatbot platform integration",
+      "env_vars": {
+        "MANYCHAT_API_KEY": {
+          "required": true,
+          "description": "Your ManyChat API key from platform settings",
+          "example": "mc_api_key_...",
+          "secret": true
+        },
+        "MANYCHAT_WEBHOOK_SECRET": {
+          "required": false,
+          "description": "Webhook signature verification secret",
+          "secret": true
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.manychat.com",
+        "webhook_path": "/integrations/manychat/webhook"
+      }
+    },
+    "botbuilders": {
+      "description": "BotBuilders multi-channel bot platform",
+      "env_vars": {
+        "BOTBUILDERS_API_KEY": {
+          "required": true,
+          "description": "Your BotBuilders API token (use either this or BOTBUILDERS_API_TOKEN - they are interchangeable)",
+          "example": "bb_token_...",
+          "secret": true
+        },
+        "BOTBUILDERS_API_TOKEN": {
+          "required": false,
+          "description": "Alternative name for BOTBUILDERS_API_KEY - only needed if your integration uses this naming convention",
+          "example": "bb_token_...",
+          "secret": true,
+          "note": "Interchangeable with BOTBUILDERS_API_KEY"
+        },
+        "BOTBUILDERS_WEBHOOK_SECRET": {
+          "required": false,
+          "description": "Webhook signature verification secret",
+          "secret": true
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.botbuilders.com",
+        "webhook_path": "/integrations/botbuilders/webhook"
+      }
+    },
+    "moltbook": {
+      "description": "MoltBook messaging platform integration",
+      "env_vars": {
+        "MOLTBOOK_API_KEY": {
+          "required": true,
+          "description": "Your MoltBook API token (use either this or MOLTBOOK_API_TOKEN - they are interchangeable)",
+          "example": "mb_token_...",
+          "secret": true
+        },
+        "MOLTBOOK_API_TOKEN": {
+          "required": false,
+          "description": "Alternative name for MOLTBOOK_API_KEY - only needed if your integration uses this naming convention",
+          "example": "mb_token_...",
+          "secret": true,
+          "note": "Interchangeable with MOLTBOOK_API_KEY"
+        },
+        "MOLTBOOK_WEBHOOK_SECRET": {
+          "required": false,
+          "description": "Webhook signature verification secret",
+          "secret": true
+        },
+        "SERVICE_BASE_URL_MOLTBOOK": {
+          "required": false,
+          "description": "Custom base URL for MoltBook service",
+          "example": "https://custom.moltbook.com",
+          "secret": false
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.moltbook.com",
+        "webhook_path": "/integrations/moltbook/webhook"
+      }
+    },
+    "moltbot": {
+      "description": "MoltBot conversational AI platform",
+      "env_vars": {
+        "MOLTBOT_API_KEY": {
+          "required": true,
+          "description": "Your MoltBot API key",
+          "example": "mbot_key_...",
+          "secret": true
+        },
+        "SERVICE_BASE_URL_MOLTBOT": {
+          "required": false,
+          "description": "Custom base URL for MoltBot service",
+          "example": "https://custom.moltbot.com",
+          "secret": false
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.moltbot.com",
+        "webhook_path": "/integrations/moltbot/webhook"
+      }
+    },
+    "openclaw": {
+      "description": "OpenClaw session-based conversational AI",
+      "env_vars": {
+        "OPENCLAW_API_KEY": {
+          "required": true,
+          "description": "Your OpenClaw API key",
+          "example": "oc_key_...",
+          "secret": true
+        },
+        "OPENCLAW_WEBHOOK_SECRET": {
+          "required": false,
+          "description": "Webhook signature verification secret",
+          "secret": true
+        },
+        "SERVICE_BASE_URL_OPENCLAW": {
+          "required": false,
+          "description": "Custom base URL for OpenClaw service",
+          "example": "https://custom.openclaw.com",
+          "secret": false
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.openclaw.com",
+        "webhook_path": "/integrations/openclaw/webhook"
+      }
+    },
+    "github": {
+      "description": "GitHub API for cross-repository operations",
+      "env_vars": {
+        "GITHUB_PAT": {
+          "required": false,
+          "description": "GitHub Personal Access Token for cross-repo API calls (only needed for advanced features)",
+          "example": "ghp_...",
+          "secret": true,
+          "note": "Only required if accessing other repositories or performing operations beyond the default GITHUB_TOKEN scope"
+        }
+      },
+      "endpoints": {
+        "api_base": "https://api.github.com"
+      }
+    },
+    "webhooks": {
+      "description": "Generic webhook configurations",
+      "env_vars": {
+        "WEBHOOK_URL": {
+          "required": false,
+          "description": "Generic webhook URL for notifications and events",
+          "example": "https://your-domain.com/webhook",
+          "secret": false,
+          "note": "Used for sending notifications to external systems"
+        }
+      }
+    }
+  },
+  "common_patterns": {
+    "service_base_urls": {
+      "description": "Pattern for custom service base URLs",
+      "format": "SERVICE_BASE_URL_<SERVICE_NAME>",
+      "examples": [
+        "SERVICE_BASE_URL_OPENCLAW",
+        "SERVICE_BASE_URL_MOLTBOOK",
+        "SERVICE_BASE_URL_MOLTBOT",
+        "SERVICE_BASE_URL_MANYCHAT",
+        "SERVICE_BASE_URL_BOTBUILDERS"
+      ],
+      "note": "Use these to override default service endpoints for custom deployments"
+    }
+  },
+  "security_notes": {
+    "secrets_management": [
+      "Never commit actual API keys or secrets to version control",
+      "Use environment variables or secure secret management systems",
+      "In GitHub Actions, use GitHub Secrets for sensitive values",
+      "Rotate API keys regularly",
+      "Use different keys for development, staging, and production"
+    ],
+    "webhook_security": [
+      "Always configure webhook secrets for production",
+      "Verify webhook signatures before processing requests",
+      "Use HTTPS for all webhook endpoints",
+      "Implement rate limiting on webhook endpoints",
+      "Log webhook failures for debugging"
+    ],
+    "api_best_practices": [
+      "Implement proper error handling for API calls",
+      "Use exponential backoff for retries",
+      "Monitor API rate limits",
+      "Cache responses where appropriate",
+      "Validate all input data before sending to APIs"
+    ]
+  },
+  "setup_instructions": {
+    "github_secrets": {
+      "description": "How to configure GitHub Actions secrets",
+      "steps": [
+        "1. Go to your repository Settings > Secrets and variables > Actions",
+        "2. Click 'New repository secret'",
+        "3. Add each required secret with its name and value",
+        "4. Secrets are masked in workflow logs automatically"
+      ]
+    },
+    "local_development": {
+      "description": "Setting up secrets for local development",
+      "steps": [
+        "1. Copy this file to config/services.json (do not commit)",
+        "2. Replace example values with actual API keys",
+        "3. Configure environment variables in backend/.env and frontend/.env.local",
+        "4. Refer to INTEGRATIONS.md for platform-specific setup"
+      ]
+    }
+  }
+}

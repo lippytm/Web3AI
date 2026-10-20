@@ -24,6 +24,9 @@ ENV/
 .env.test.local
 .env.production.local
 
+# Service configuration (keep example only)
+config/services.json
+
 # Build outputs
 dist/
 build/
