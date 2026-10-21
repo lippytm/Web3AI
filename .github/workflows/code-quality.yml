@@ -1,0 +1,145 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+          pip install radon bandit safety
+
+      - name: Check code complexity (Python)
+        working-directory: ./backend
+        run: |
+          radon cc app/ -a --total-average || true
+          radon mi app/ --min B || true
+
+      - name: Security check (Python)
+        working-directory: ./backend
+        run: |
+          bandit -r app/ -f json -o bandit-report.json || true
+          cat bandit-report.json
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          echo "## TODO/FIXME Comments" >> $GITHUB_STEP_SUMMARY
+          grep -r "TODO\|FIXME" --include="*.py" --include="*.ts" --include="*.tsx" --include="*.js" backend/ frontend/ contracts/ || echo "No TODO/FIXME comments found" >> $GITHUB_STEP_SUMMARY
+
+  dependency-check:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Audit npm dependencies (Frontend)
+        working-directory: ./frontend
+        run: |
+          npm audit --audit-level=moderate || true
+
+      - name: Audit npm dependencies (Contracts)
+        working-directory: ./contracts
+        run: |
+          npm audit --audit-level=moderate || true
+
+      - name: Check Python dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+          pip install safety
+          safety check --json || true
+
+  test-coverage:
+    name: Test Coverage Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-cov
+
+      - name: Run tests with coverage
+        working-directory: ./backend
+        env:
+          OPENAI_API_KEY: test-key
+          MODEL_NAME: GPT-5.1-Codex-Max
+          ETH_RPC_URL: https://eth.llamarpc.com
+          NETWORK: mainnet
+        run: |
+          pytest --cov=app --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./backend/coverage.xml
+          flags: backend
+          fail_ci_if_error: false
